@@ -1,15 +1,15 @@
 apply plugin: 'com.novoda.bintray-release'
 
 publish{
-    userOrg = 'ssfandroid'
-    repoName = 'Android'
-    groupId = 'com.ssf.framework'
-    artifactId = 'autolayout'
-    publishVersion = '1.0.0'
-    desc = '基于鸿洋 auto-layout 扩展'
-    website = ''
-    bintrayUser='ssfandroid'
-    bintrayKey='2712b95596680d347d5d5ad386df5f3ce0de3073'
+    userOrg = USERORG
+    repoName = REPONAME
+    groupId = GROUPID
+    artifactId = ARTIFACTID
+    publishVersion = PUBLISHVERSION
+    desc = DESC
+    website = WEBSITE
+    bintrayUser=BINTRAYUSER
+    bintrayKey=BINTRAYKEY
     dryRun=false
 }
 

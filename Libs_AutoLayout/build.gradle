@@ -1,4 +1,6 @@
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+
 apply from: 'upload_bintray.gradle'
 
 def config = rootProject.ext

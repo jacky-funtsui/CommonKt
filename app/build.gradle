@@ -122,9 +122,9 @@ dependencies {
     implementation lib.SupportCardView
     implementation lib.SupportDesign
     implementation lib.SupportRecyclerviewV7
+    implementation lib.ConstraintLayout
     implementation 'com.android.support:multidex:1.0.3'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     // ARouter
     implementation 'com.alibaba:arouter-api:1.3.1'
     kapt 'com.alibaba:arouter-compiler:1.1.4'
