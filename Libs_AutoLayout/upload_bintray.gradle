@@ -1,0 +1,21 @@
+apply plugin: 'com.novoda.bintray-release'
+
+publish{
+    userOrg = 'ssfandroid'
+    repoName = 'Android'
+    groupId = 'com.ssf.framework'
+    artifactId = 'autolayout'
+    publishVersion = '1.0.0'
+    desc = '基于鸿洋 auto-layout 扩展'
+    website = ''
+    bintrayUser='ssfandroid'
+    bintrayKey='2712b95596680d347d5d5ad386df5f3ce0de3073'
+    dryRun=false
+}
+
+//防止编码问题
+tasks.withType(Javadoc) {
+    options.addStringOption('Xdoclint:none', '-quiet')
+    options.addStringOption('encoding', 'UTF-8')
+    options.addStringOption('charSet', 'UTF-8')
+}

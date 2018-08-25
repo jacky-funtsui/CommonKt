@@ -23,6 +23,8 @@ buildscript {
         classpath 'org.greenrobot:greendao-gradle-plugin:3.2.2'
         // ARouter
         classpath 'com.alibaba:arouter-register:1.0.2'
+        // bintray
+        classpath 'com.novoda:bintray-release:0.8.0'
     }
 }
 
