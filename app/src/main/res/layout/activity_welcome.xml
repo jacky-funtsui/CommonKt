@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.ssf.commonkt.ui.welcome.WelcomeViewModel" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/welcome"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:gravity="right">
+
+            <TextView
+                android:id="@+id/tv_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15px"
+                android:layout_marginRight="30px"
+                android:background="@drawable/guide_count"
+                android:onClick="@{(Context) -> viewModel.next(context)}"
+                android:text="@{@string/welcome_skip_count(viewModel.count)}"
+                android:textColor="#ffff"
+                android:visibility="visible" />
+        </LinearLayout>
+    </RelativeLayout>
+
+</layout>

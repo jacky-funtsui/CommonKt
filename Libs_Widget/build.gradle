@@ -1,0 +1,41 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
+
+def config = rootProject.ext
+def lib = rootProject.ext.libs
+android {
+    compileSdkVersion config.compileSdkVersion
+
+    defaultConfig {
+        minSdkVersion config.minSdkVersion
+        targetSdkVersion config.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+    }
+
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation lib.SupportV7
+    implementation lib.SupportRecyclerviewV7
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    // 屏幕适配
+    api project(':Libs_AutoLayout')
+    api 'com.contrarywind:Android-PickerView:3.2.6'
+    api 'com.github.lecho:hellocharts-android:v1.5.8'
+    // MPAndroidChart
+    api project(':Libs_Util')
+}
+

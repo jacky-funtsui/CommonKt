@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- laoding -->
+    <item name="net_tv_message" type="id"/>
+    <!-- banner -->
+    <item name="cb_item_tag" type="id"/>
+    <!-- tabhost -->
+    <item name="containerId" type="id"/>
+    <item name="tab_item_image" type="id"/>
+    <item name="tab_item_title" type="id"/>
+</resources>

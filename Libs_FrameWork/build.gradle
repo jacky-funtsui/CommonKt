@@ -1,0 +1,69 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+def config = rootProject.ext
+def lib = rootProject.ext.libs
+android {
+    compileSdkVersion config.compileSdkVersion
+
+    defaultConfig {
+        minSdkVersion config.minSdkVersion
+        targetSdkVersion config.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+    }
+
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    dataBinding {
+        enabled = true
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation lib.SupportV7
+    implementation lib.SupportRecyclerviewV7
+    implementation lib.SupportDesign
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    //log
+    api project(':Libs_Log')
+    //util
+    implementation project(':Libs_Util')
+    // 消息推送
+    api project(':PushSDK')
+    // 微信快捷登录等
+    api project(':Libs_Social')
+    // 图片库
+    api project(':Libs_Glide')
+    // net
+    api project(':Libs_Net')
+    // 下拉刷新
+    api project(':Libs_RefreshLayout')
+    //图片裁剪
+    implementation('com.github.yalantis:ucrop:2.2.1', {
+        exclude module: "okhttp"
+    })
+    //二维码
+    api 'cn.yipianfengye.android:zxing-library:2.1'
+    // 友盟统计 因为 这边 BaseActivity需要
+    api 'com.umeng.sdk:common:1.5.3'
+    api 'com.umeng.sdk:analytics:7.5.3'
+    // lifecycle
+    api "android.arch.lifecycle:extensions:$lifecycle"
+    //dagger
+    api "com.google.dagger:dagger:$dagger_version"
+    api "com.google.dagger:dagger-android:$dagger_version"
+    api "com.google.dagger:dagger-android-support:$dagger_version"
+    // dagger
+    kapt "com.google.dagger:dagger-compiler:$dagger_version"
+    kapt "com.google.dagger:dagger-android-processor:$dagger_version"
+}

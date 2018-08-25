@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">CommonKt</string>
+    <string name="welcome_skip_count">%1d 跳过</string>
+</resources>

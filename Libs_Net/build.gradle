@@ -1,0 +1,72 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'org.greenrobot.greendao'
+
+
+def config = rootProject.ext
+def lib = rootProject.ext.libs
+android {
+    compileSdkVersion config.compileSdkVersion
+
+    defaultConfig {
+        minSdkVersion config.minSdkVersion
+        targetSdkVersion config.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation lib.SupportV7
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    //greendao
+    implementation 'org.greenrobot:greendao:3.2.2' // add library
+    //retrofit
+    api "com.squareup.retrofit2:retrofit:$retrofit_version"
+    api("com.squareup.retrofit2:adapter-rxjava2:$retrofit_version") {
+        exclude group: 'io.reactivex.rxjava2', module: 'rxjava'
+    }
+    api "com.squareup.retrofit2:converter-moshi:$retrofit_version"
+    //retrofit - String 支持
+    api "com.squareup.retrofit2:converter-scalars:$retrofit_version"
+    //retrofit - GSON 支持
+    api("com.squareup.retrofit2:converter-gson:$retrofit_version") {
+        exclude group: 'com.google.code.gson', module: 'gson'
+    }
+    //retrofit - xml解析
+    api("com.squareup.retrofit2:converter-simplexml:$rxkotlin_version") {
+        exclude group: 'xpp3', module: 'xpp3'
+        exclude group: 'stax', module: 'stax-api'
+        exclude group: 'stax', module: 'stax'
+    }
+    //OKHTTP 拦截器，主要用于输出日志
+    api "com.squareup.okhttp3:okhttp:$okhttp_version"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
+    // rxcache
+    api 'com.github.VictorAlbertos.RxCache:runtime:1.8.3-2.x'
+    // To use Gson
+    api("com.github.VictorAlbertos.Jolyglot:gson:$rxcache_gson_version") {
+        exclude group: 'com.google.code.gson', module: 'gson'
+    }
+
+    api('io.socket:socket.io-client:1.0.0') {
+        // excluding org.json which is provided by Android
+        exclude group: 'org.json', module: 'json'
+    }
+    // 消息
+    api 'org.greenrobot:eventbus:3.1.1'
+    //log
+    api project(':Libs_Log')
+    //widget
+    api project(':Libs_Widget')
+}
