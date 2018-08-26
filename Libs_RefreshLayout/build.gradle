@@ -12,7 +12,7 @@ android {
         minSdkVersion config.minSdkVersion
         targetSdkVersion config.targetSdkVersion
         versionCode 1
-        versionName "1.0"
+        versionName config.framework_refreshlayout_version
     }
 
     buildTypes {
@@ -29,10 +29,8 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation lib.SupportV7
     implementation lib.SupportRecyclerviewV7
-    // net
-    implementation project(':Libs_Net')
-    //log
-    implementation project(':Libs_Log')
-    // 组件
-    implementation project(':Libs_Widget')
+    // 网络请求
+    api  "com.ssf.framework:net:$config.framework_net_version"
 }
+
+apply from: 'upload_bintray.gradle'

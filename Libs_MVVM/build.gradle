@@ -12,7 +12,7 @@ android {
         minSdkVersion config.minSdkVersion
         targetSdkVersion config.targetSdkVersion
         versionCode 1
-        versionName "1.0"
+        versionName config.framework_mvvm_version
     }
 
 
@@ -34,5 +34,18 @@ dependencies {
     implementation lib.SupportRecyclerviewV7
     implementation lib.SupportDesign
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    api project(':Libs_FrameWork')
+    // framework
+    api  "com.ssf.framework:main:$config.framework_main_version"
+    // lifecycle
+    api "android.arch.lifecycle:extensions:$lifecycle"
+    //dagger
+    api "com.google.dagger:dagger:$dagger_version"
+    api "com.google.dagger:dagger-android:$dagger_version"
+    api "com.google.dagger:dagger-android-support:$dagger_version"
+    // dagger
+    kapt "com.google.dagger:dagger-compiler:$dagger_version"
+    kapt "com.google.dagger:dagger-android-processor:$dagger_version"
 }
+
+
+apply from: 'upload_bintray.gradle'

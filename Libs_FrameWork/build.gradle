@@ -12,7 +12,7 @@ android {
         minSdkVersion config.minSdkVersion
         targetSdkVersion config.targetSdkVersion
         versionCode 1
-        versionName "1.0"
+        versionName config.framework_main_version
     }
 
 
@@ -40,36 +40,14 @@ dependencies {
     implementation lib.SupportDesign
     implementation lib.ConstraintLayout
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    //log
-    api project(':Libs_Log')
-    //util
-    implementation project(':Libs_Util')
-    // 消息推送
-    api project(':PushSDK')
-    // 微信快捷登录等
-    api project(':Libs_Social')
     // 图片库
-    api project(':Libs_Glide')
-    // net
-    api project(':Libs_Net')
-    // 下拉刷新
-    api project(':Libs_RefreshLayout')
-    //图片裁剪
-    implementation('com.github.yalantis:ucrop:2.2.1', {
-        exclude module: "okhttp"
-    })
-    //二维码
-    api 'cn.yipianfengye.android:zxing-library:2.1'
-    // 友盟统计 因为 这边 BaseActivity需要
-    api 'com.umeng.sdk:common:1.5.3'
-    api 'com.umeng.sdk:analytics:7.5.3'
-    // lifecycle
-    api "android.arch.lifecycle:extensions:$lifecycle"
-    //dagger
-    api "com.google.dagger:dagger:$dagger_version"
-    api "com.google.dagger:dagger-android:$dagger_version"
-    api "com.google.dagger:dagger-android-support:$dagger_version"
-    // dagger
-    kapt "com.google.dagger:dagger-compiler:$dagger_version"
-    kapt "com.google.dagger:dagger-android-processor:$dagger_version"
+    api  "com.ssf.framework:glide:$config.framework_glide_version"
+    // 消息推送
+    api  "com.ssf.framework:umeng:$config.framework_umeng_version"
+    // 微信快捷登录等
+    api  "com.ssf.framework:social:$config.framework_social_version"
+    // 下拉刷新 and  网络请求
+    api  "com.ssf.framework:refreshlayout:$config.framework_refreshlayout_version"
 }
+
+apply from: 'upload_bintray.gradle'

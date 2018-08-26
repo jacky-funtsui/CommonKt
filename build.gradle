@@ -12,6 +12,10 @@ buildscript {
     ext.dagger_version = "2.16"
     ext.lifecycle = "1.1.1"
     ext.gson_version = "2.8.2"
+    ext.greendao_version = "3.2.2"
+    // glide
+    ext.glide_version = "4.6.1"
+    ext.glide_transformations_version = "3.0.1"
 
     repositories {
         google()
@@ -22,7 +26,7 @@ buildscript {
         classpath 'com.android.tools.build:gradle:3.1.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         // greenDao
-        classpath 'org.greenrobot:greendao-gradle-plugin:3.2.2'
+        classpath "org.greenrobot:greendao-gradle-plugin:$greendao_version"
         // ARouter
         classpath 'com.alibaba:arouter-register:1.0.2'
         // bintray
@@ -83,7 +87,20 @@ ext {
     framework_social_version = '1.0.0'
     // autolayout 扩展版
     framework_autolayout_version = '1.0.4'
-    // 窗口小组件封装  基于 autolayout、util
-    framework_widget_version = '1.0.0'
-
+    // glide 图片加载
+    framework_glide_version = '1.0.0'
+    // 友盟相关  消息推送 友盟统计
+    framework_umeng_version = '1.0.0'
+    // 窗口小组件封装  基于 autolayout、util、log
+    framework_widget_version = '1.0.1'
+    // 网络请求 基于 widget
+    framework_net_version = '1.0.0'
+    // 上下拉刷新 因为 XRefreshLayout 基于 net
+    framework_refreshlayout_version = '1.0.0'
+    /**
+     * framework 主工程
+     * 基于 上面所有 libs
+     */
+    framework_main_version = '1.0.0'
+    framework_mvvm_version = '1.0.0'
 }

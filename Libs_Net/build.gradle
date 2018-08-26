@@ -13,7 +13,7 @@ android {
         minSdkVersion config.minSdkVersion
         targetSdkVersion config.targetSdkVersion
         versionCode 1
-        versionName "1.0"
+        versionName config.framework_net_version
     }
 
     buildTypes {
@@ -30,7 +30,7 @@ dependencies {
     implementation lib.SupportV7
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     //greendao
-    implementation 'org.greenrobot:greendao:3.2.2' // add library
+    api "org.greenrobot:greendao:$greendao_version"
     //retrofit
     api "com.squareup.retrofit2:retrofit:$retrofit_version"
     api("com.squareup.retrofit2:adapter-rxjava2:$retrofit_version") {
@@ -65,8 +65,8 @@ dependencies {
     }
     // 消息
     api 'org.greenrobot:eventbus:3.1.1'
-    //log
-    api project(':Libs_Log')
     //widget
-    api project(':Libs_Widget')
+    api "com.ssf.framework:widget:$config.framework_widget_version"
 }
+
+apply from: 'upload_bintray.gradle'

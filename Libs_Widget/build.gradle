@@ -31,10 +31,12 @@ dependencies {
     implementation lib.SupportV7
     implementation lib.SupportRecyclerviewV7
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    // 屏幕适配
-    api "com.ssf.framework:autolayout:$config.framework_autolayout_version"
+    // log
+    api  "com.ssf.framework:log:$config.framework_log_version"
     // util
     api "com.ssf.framework:util:$config.framework_util_version"
+    // 屏幕适配
+    api "com.ssf.framework:autolayout:$config.framework_autolayout_version"
 }
 
 apply from: 'upload_bintray.gradle'

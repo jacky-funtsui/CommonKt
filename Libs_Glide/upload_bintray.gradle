@@ -1,0 +1,23 @@
+apply plugin: 'com.novoda.bintray-release'
+
+def projectVersionName = android.defaultConfig.versionName
+
+publish{
+    userOrg = USERORG
+    repoName = REPONAME
+    groupId = GROUPID
+    artifactId = ARTIFACTID
+    publishVersion = projectVersionName
+    desc = DESC
+    website = WEBSITE
+    bintrayUser=BINTRAYUSER
+    bintrayKey=BINTRAYKEY
+    dryRun=false
+}
+
+//防止编码问题
+tasks.withType(Javadoc) {
+    options.addStringOption('Xdoclint:none', '-quiet')
+    options.addStringOption('encoding', 'UTF-8')
+    options.addStringOption('charSet', 'UTF-8')
+}
