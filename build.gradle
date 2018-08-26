@@ -11,10 +11,12 @@ buildscript {
     ext.rxAndroid_version = '2.0.2'
     ext.dagger_version = "2.16"
     ext.lifecycle = "1.1.1"
+    ext.gson_version = "2.8.2"
 
     repositories {
         google()
         jcenter()
+        maven { url "https://dl.bintray.com/ssfandroid/Android/" }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.1.2'
@@ -33,6 +35,18 @@ allprojects {
         google()
         jcenter()
         maven { url "https://jitpack.io" }
+        maven { url "https://dl.bintray.com/ssfandroid/Android/" }
+    }
+
+    tasks.withType(Javadoc) {
+        tasks.withType(Javadoc).all {
+            enabled = false
+        }
+        options {
+            encoding "UTF-8"
+            charSet 'UTF-8'
+            links "http://docs.oracle.com/javase/7/docs/api"
+        }
     }
 }
 
@@ -58,4 +72,18 @@ ext {
             SupportDesign        : "com.android.support:design:$supportVersion",
             ConstraintLayout     : "com.android.support.constraint:constraint-layout:$constraintVersion"
     ]
+    /**
+     * maven版本
+     */
+    // log工具类
+    framework_log_version = '1.0.0'
+    // 常用工具类
+    framework_util_version = '1.0.0'
+    // 第三方登录
+    framework_social_version = '1.0.0'
+    // autolayout 扩展版
+    framework_autolayout_version = '1.0.4'
+    // 窗口小组件封装  基于 autolayout、util
+    framework_widget_version = '1.0.0'
+
 }

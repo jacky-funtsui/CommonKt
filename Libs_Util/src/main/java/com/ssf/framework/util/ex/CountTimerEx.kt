@@ -8,6 +8,7 @@ import com.trello.rxlifecycle2.components.support.RxDialogFragment
 import com.trello.rxlifecycle2.components.support.RxFragment
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
@@ -26,7 +27,7 @@ import java.util.concurrent.TimeUnit
  * @param next     每一秒回调
  * @param complete 完成回调
  */
-inline fun View.bindCountTimer(activity: RxAppCompatActivity, count: Long, isEnable: Boolean = false, crossinline next: (Long) -> Unit, crossinline complete: () -> Unit) {
+inline fun View.bindCountTimer(activity: RxAppCompatActivity, count: Long, isEnable: Boolean = false, crossinline next: (Long) -> Unit, crossinline complete: () -> Unit): Disposable {
     if (isEnable) {
         this.isEnabled = false
     } else {
@@ -35,7 +36,7 @@ inline fun View.bindCountTimer(activity: RxAppCompatActivity, count: Long, isEna
             complete()
         }
     }
-    Observable.intervalRange(0, count, 0, 1, TimeUnit.SECONDS)
+    return Observable.intervalRange(0, count, 0, 1, TimeUnit.SECONDS)
             .subscribeOn(Schedulers.io())
             .unsubscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread(), true)
@@ -52,11 +53,11 @@ inline fun View.bindCountTimer(activity: RxAppCompatActivity, count: Long, isEna
             }, { print(it.message) })
 }
 
-inline fun View.bindCountTimer(activity: RxFragment, count: Long, isEnable: Boolean = false, crossinline next: (Long) -> Unit, crossinline complete: () -> Unit) {
+inline fun View.bindCountTimer(activity: RxFragment, count: Long, isEnable: Boolean = false, crossinline next: (Long) -> Unit, crossinline complete: () -> Unit):Disposable {
     if (isEnable) {
         this.isEnabled = false
     }
-    Observable.intervalRange(0, count, 0, 1, TimeUnit.SECONDS)
+    return Observable.intervalRange(0, count, 0, 1, TimeUnit.SECONDS)
             .subscribeOn(Schedulers.io())
             .unsubscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread(), true)
@@ -73,11 +74,11 @@ inline fun View.bindCountTimer(activity: RxFragment, count: Long, isEnable: Bool
             }.subscribe()
 }
 
-inline fun View.bindCountTimer(activity: RxDialogFragment, count: Long, isEnable: Boolean = false, crossinline next: (Long) -> Unit, crossinline complete: () -> Unit) {
+inline fun View.bindCountTimer(activity: RxDialogFragment, count: Long, isEnable: Boolean = false, crossinline next: (Long) -> Unit, crossinline complete: () -> Unit):Disposable {
     if (isEnable) {
         this.isEnabled = false
     }
-    Observable.intervalRange(0, count, 0, 1, TimeUnit.SECONDS)
+    return Observable.intervalRange(0, count, 0, 1, TimeUnit.SECONDS)
             .subscribeOn(Schedulers.io())
             .unsubscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread(), true)

@@ -38,6 +38,7 @@ dependencies {
     implementation lib.SupportV7
     implementation lib.SupportRecyclerviewV7
     implementation lib.SupportDesign
+    implementation lib.ConstraintLayout
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     //log
     api project(':Libs_Log')

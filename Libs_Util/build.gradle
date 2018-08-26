@@ -11,7 +11,7 @@ android {
         minSdkVersion config.minSdkVersion
         targetSdkVersion config.targetSdkVersion
         versionCode 1
-        versionName "1.0"
+        versionName config.framework_util_version
     }
 
     buildTypes {
@@ -35,9 +35,11 @@ dependencies {
     api("com.trello.rxlifecycle2:rxlifecycle-components:$rxlifecycle_version") {
         exclude group: 'io.reactivex.rxjava2', module: 'rxandroid'
     }
-    api 'com.google.code.gson:gson:2.8.2'
+    api "com.google.code.gson:gson:$gson_version"
     api "io.reactivex.rxjava2:rxandroid:$rxAndroid_version"
 }
 repositories {
     mavenCentral()
 }
+
+apply from: 'upload_bintray.gradle'

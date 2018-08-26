@@ -12,7 +12,7 @@ android {
         minSdkVersion config.minSdkVersion
         targetSdkVersion config.targetSdkVersion
         versionCode 1
-        versionName "1.0"
+        versionName config.framework_widget_version
     }
 
 
@@ -32,10 +32,9 @@ dependencies {
     implementation lib.SupportRecyclerviewV7
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     // 屏幕适配
-    api project(':Libs_AutoLayout')
-    api 'com.contrarywind:Android-PickerView:3.2.6'
-    api 'com.github.lecho:hellocharts-android:v1.5.8'
-    // MPAndroidChart
-    api project(':Libs_Util')
+    api "com.ssf.framework:autolayout:$config.framework_autolayout_version"
+    // util
+    api "com.ssf.framework:util:$config.framework_util_version"
 }
 
+apply from: 'upload_bintray.gradle'

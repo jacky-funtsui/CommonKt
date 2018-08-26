@@ -1,8 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
-apply from: 'upload_bintray.gradle'
-
 def config = rootProject.ext
 def lib = rootProject.ext.libs
 android {
@@ -12,7 +10,7 @@ android {
         minSdkVersion config.minSdkVersion
         targetSdkVersion config.targetSdkVersion
         versionCode 1
-        versionName "1.0"
+        versionName config.framework_autolayout_version
     }
 
     buildTypes {
@@ -30,3 +28,5 @@ dependencies {
     implementation lib.ConstraintLayout
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 }
+
+apply from: 'upload_bintray.gradle'

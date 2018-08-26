@@ -10,7 +10,7 @@ android {
         minSdkVersion config.minSdkVersion
         targetSdkVersion config.targetSdkVersion
         versionCode 1
-        versionName "1.0"
+        versionName config.framework_social_version
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -32,3 +32,5 @@ dependencies {
     api fileTree(dir: 'libs', include: ['*.jar'])
     implementation lib.SupportV7
 }
+
+apply from: 'upload_bintray.gradle'
