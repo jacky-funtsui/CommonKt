@@ -16,6 +16,8 @@ buildscript {
     // glide
     ext.glide_version = "4.6.1"
     ext.glide_transformations_version = "3.0.1"
+    // tinker
+    ext.tinker_version = "1.9.5"
 
     repositories {
         google()
@@ -89,6 +91,10 @@ ext {
     framework_autolayout_version = '1.0.4'
     // glide 图片加载
     framework_glide_version = '1.0.0'
+    // bsdiff
+    framework_bsdiff_version = '1.0.0'
+    // tinker
+    framework_tinker_version = '1.0.0'
     // 友盟相关  消息推送 友盟统计
     framework_umeng_version = '1.0.0'
     // 窗口小组件封装  基于 autolayout、util、log
