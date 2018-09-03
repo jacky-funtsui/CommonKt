@@ -69,7 +69,7 @@ abstract class MVVMFragment<T : ViewDataBinding>(
         }
     }
 
-    protected fun createViewModelProvider(): ViewModelProvider {
+    protected open fun createViewModelProvider(): ViewModelProvider {
         return SuperViewModelProvider(this, viewModelFactory, appViewModelProvider)
     }
 }

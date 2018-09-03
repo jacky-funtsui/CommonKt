@@ -3,10 +3,13 @@ package com.ssf.framework.main.mvvm.adapter
 import android.content.Context
 import android.databinding.DataBindingUtil
 import android.databinding.ViewDataBinding
+import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import com.ssf.framework.main.adapter.BaseViewHolder
 import java.lang.Exception
 
 /**
@@ -22,7 +25,15 @@ abstract class BaseBindingAdapter<T, B : ViewDataBinding>(
         var itemClickListener: BaseBindingAdapter.OnItemClickListener<T>? = null,
         // layout 上 绑定的监听id
         vararg var clickIDs: Int
-) : RecyclerView.Adapter<BaseBindingViewHolder<B>>() {
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    companion object {
+        const val VIEW_TYPE_HEADER = -100
+        const val VIEW_TYPE_FOOTER = -101
+    }
+
+    private var mHeaderLayout: LinearLayout? = null
+    private var mFooterLayout: LinearLayout? = null
 
     private val layoutInflater: LayoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
@@ -30,7 +41,40 @@ abstract class BaseBindingAdapter<T, B : ViewDataBinding>(
         return layoutID//默认返回传入的layout，可重写
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseBindingViewHolder<B> {
+    override fun getItemViewType(position: Int): Int {
+        mHeaderLayout?.let {
+            if (position == 0) return VIEW_TYPE_HEADER
+        }
+
+        mFooterLayout?.let {
+            if (position == getHeaderLayoutCount() + list.size) return VIEW_TYPE_FOOTER
+        }
+        return getDefItemViewType(position - getHeaderLayoutCount())//取在数据中的下标
+    }
+
+    protected fun getDefItemViewType(position: Int): Int {
+        return super.getItemViewType(position)
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return when (viewType) {
+            VIEW_TYPE_HEADER -> {
+                createBaseViewHolder(parent, viewType, mHeaderLayout!!)
+            }
+            VIEW_TYPE_FOOTER -> {
+                createBaseViewHolder(parent, viewType, mFooterLayout!!)
+            }
+            else -> {
+                createBindingViewHolder(parent, viewType)
+            }
+        }
+    }
+
+    private fun createBaseViewHolder(parent: ViewGroup, viewType: Int, itemView: View): BaseViewHolder {
+        return BaseViewHolder(itemView)
+    }
+
+    private fun createBindingViewHolder(parent: ViewGroup, viewType: Int): BaseBindingViewHolder<B> {
         val layoutId = getLayoutId(viewType)
         val binding = DataBindingUtil.inflate<B>(layoutInflater, layoutId, parent, false)
         // 绑定监听回调
@@ -39,7 +83,22 @@ abstract class BaseBindingAdapter<T, B : ViewDataBinding>(
         return BaseBindingViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: BaseBindingViewHolder<B>, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        val viewType = getItemViewType(position)
+        when (viewType) {
+            VIEW_TYPE_HEADER -> {
+            }//undo
+            VIEW_TYPE_FOOTER -> {
+            }//undo
+            else -> {
+                //实际上绑定数据的ViewHolder
+                onBindBindingViewHolder(holder as BaseBindingViewHolder<B>, position - getHeaderLayoutCount())
+            }
+        }
+
+    }
+
+    protected fun onBindBindingViewHolder(holder: BaseBindingViewHolder<B>, position: Int) {
         holder.binding.root.tag = position
         val bean = list[position]
         convert(holder, bean, position)
@@ -47,7 +106,34 @@ abstract class BaseBindingAdapter<T, B : ViewDataBinding>(
     }
 
     override fun getItemCount(): Int {
-        return list.size
+        return list.size + getHeaderLayoutCount() + getFooterLayoutCount()
+    }
+
+    /**
+     * RecyclerView需要先设置manager再设置adapter才有效
+     */
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+        val layoutManager = recyclerView.layoutManager
+        if (layoutManager is GridLayoutManager) {
+            layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+                override fun getSpanSize(position: Int): Int {
+                    val viewType = getItemViewType(position)
+                    if (isFixedViewType(viewType)) {
+                        return layoutManager.spanCount
+                    }
+                    return 1
+                }
+            }
+        }
+    }
+
+    private fun isFixedViewType(viewType: Int): Boolean {
+        return when (viewType) {
+            VIEW_TYPE_HEADER,
+            VIEW_TYPE_FOOTER -> true
+            else -> false
+        }
     }
 
     /**
@@ -83,6 +169,113 @@ abstract class BaseBindingAdapter<T, B : ViewDataBinding>(
 
     protected abstract fun convert(holder: BaseBindingViewHolder<B>, bean: T, position: Int)
 
+
+    /**
+     * 添加头部
+     * @param index
+     */
+    fun addHeader(view: View, index: Int = -1): Int {
+        if (mHeaderLayout == null) {
+            mHeaderLayout = LinearLayout(view.context)
+            mHeaderLayout?.orientation = LinearLayout.VERTICAL
+            mHeaderLayout?.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        }
+
+        var insertIndex = 0
+        val childCount = mHeaderLayout!!.childCount
+        if (index < 0 || index > childCount) {
+            insertIndex = childCount
+        }
+
+        mHeaderLayout!!.addView(view, insertIndex)
+        if (mHeaderLayout!!.childCount == 1) {
+            val position = getHeaderViewPosition()
+            if (position != -1) {
+                notifyItemInserted(position)
+            }
+        }
+        return insertIndex
+    }
+
+    /**
+     * 添加尾部
+     */
+    fun addFooter(view: View, index: Int = -1): Int {
+        if (mFooterLayout == null) {
+            mFooterLayout = LinearLayout(view.context)
+            mFooterLayout?.orientation = LinearLayout.VERTICAL
+            mFooterLayout?.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        }
+
+        var insertIndex = 0
+        val childCount = mFooterLayout!!.childCount
+        if (index < 0 || index > childCount) {
+            insertIndex = childCount
+        }
+
+        mFooterLayout!!.addView(view, insertIndex)
+        if (mFooterLayout!!.childCount == 1) {
+            val position = getFooterViewPosition()
+            if (position != -1) {
+                notifyItemInserted(position)
+            }
+        }
+        return insertIndex
+    }
+
+    fun removeHeader(view: View) {
+        mHeaderLayout?.let {
+            it.removeView(view)
+            if (it.childCount == 0) {
+                val position = getHeaderViewPosition()
+                if (position != -1) {
+                    notifyItemRemoved(position)
+                }
+            }
+        }
+    }
+
+    fun removeFooter(view: View) {
+        mFooterLayout?.let {
+            it.removeView(view)
+            if (it.childCount == 0) {
+                val position = getFooterViewPosition()
+                if (position != -1) {
+                    notifyItemRemoved(position)
+                }
+            }
+        }
+    }
+
+    fun getHeaderLayoutCount(): Int {
+        return mHeaderLayout?.let {
+            if (getHeaderCount() > 0) 1 else 0
+        } ?: 0
+    }
+
+    fun getFooterLayoutCount(): Int {
+        return mFooterLayout?.let {
+            if (getFooterCount() > 0) 1 else 0
+        } ?: 0
+    }
+
+    protected fun getHeaderCount(): Int {
+        return mHeaderLayout?.childCount ?: 0
+    }
+
+    protected fun getFooterCount(): Int {
+        return mFooterLayout?.childCount ?: 0
+    }
+
+    fun getHeaderViewPosition(): Int {
+        mHeaderLayout?.let { return 0 }
+        return -1
+    }
+
+    fun getFooterViewPosition(): Int {
+        mFooterLayout?.let { return getHeaderCount() + list.size }
+        return -1
+    }
 
     /**
      * item点击监听

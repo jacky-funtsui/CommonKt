@@ -61,7 +61,14 @@ public class ListBinding {
             DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new DiffCallBack(oldDatas, newDatas));
             oldDatas.clear();
             oldDatas.addAll(newDatas);
-            diffResult.dispatchUpdatesTo(adapter);
+            diffResult.dispatchUpdatesTo(new HeaderAdapterListUpdateCallback(adapter));
         }
+    }
+
+    private static void closeItemAnimatior(RecyclerView recyclerView,boolean isClose){
+        recyclerView.getItemAnimator().setAddDuration(0);
+        recyclerView.getItemAnimator().setMoveDuration(0);
+        recyclerView.getItemAnimator().setRemoveDuration(0);
+        recyclerView.getItemAnimator().setChangeDuration(0);
     }
 }
