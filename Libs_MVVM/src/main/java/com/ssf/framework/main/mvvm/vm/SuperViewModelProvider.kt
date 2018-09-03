@@ -3,8 +3,6 @@ package com.ssf.framework.main.mvvm.vm
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
-import android.arch.lifecycle.ViewModelStoreOwner
-import android.support.annotation.NonNull
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import com.ssf.framework.main.mvvm.ob.DefaultErrorObserver
