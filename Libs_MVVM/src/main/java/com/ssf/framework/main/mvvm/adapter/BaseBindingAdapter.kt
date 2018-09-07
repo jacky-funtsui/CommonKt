@@ -34,11 +34,15 @@ abstract class BaseBindingAdapter<T, B : ViewDataBinding>(
 
     private var mHeaderLayout: LinearLayout? = null
     private var mFooterLayout: LinearLayout? = null
+    //头部占span是否和其它item相同
+    var isHeaderViewAsFlow = false
+    //尾部占span是否和其它item相同
+    var isFooterViewAsFlow = false
 
     private val layoutInflater: LayoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
     open fun getLayoutId(viewType: Int): Int {
-        return layoutID//默认返回传入的layout，可重写
+        return layoutID//默认返回传入的layout，可重写实现多布局
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -52,7 +56,10 @@ abstract class BaseBindingAdapter<T, B : ViewDataBinding>(
         return getDefItemViewType(position - getHeaderLayoutCount())//取在数据中的下标
     }
 
-    protected fun getDefItemViewType(position: Int): Int {
+    /**
+     * 复写，以实现多布局
+     */
+    open fun getDefItemViewType(position: Int): Int {
         return super.getItemViewType(position)
     }
 
@@ -98,7 +105,7 @@ abstract class BaseBindingAdapter<T, B : ViewDataBinding>(
 
     }
 
-    protected fun onBindBindingViewHolder(holder: BaseBindingViewHolder<B>, position: Int) {
+    open fun onBindBindingViewHolder(holder: BaseBindingViewHolder<B>, position: Int) {
         holder.binding.root.tag = position
         val bean = list[position]
         convert(holder, bean, position)
@@ -106,7 +113,11 @@ abstract class BaseBindingAdapter<T, B : ViewDataBinding>(
     }
 
     override fun getItemCount(): Int {
-        return list.size + getHeaderLayoutCount() + getFooterLayoutCount()
+        return getDataItemCount() + getHeaderLayoutCount() + getFooterLayoutCount()
+    }
+
+    open fun getDataItemCount(): Int {
+        return list.size
     }
 
     /**
@@ -116,13 +127,20 @@ abstract class BaseBindingAdapter<T, B : ViewDataBinding>(
         super.onAttachedToRecyclerView(recyclerView)
         val layoutManager = recyclerView.layoutManager
         if (layoutManager is GridLayoutManager) {
+            val sizeLookup = layoutManager.spanSizeLookup
             layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                 override fun getSpanSize(position: Int): Int {
                     val viewType = getItemViewType(position)
+                    if (viewType == VIEW_TYPE_HEADER && isHeaderViewAsFlow) {
+                        return 1
+                    }
+                    if (viewType == VIEW_TYPE_FOOTER && isFooterViewAsFlow) {
+                        return 1
+                    }
                     if (isFixedViewType(viewType)) {
                         return layoutManager.spanCount
                     }
-                    return 1
+                    return sizeLookup.getSpanSize(position - getHeaderLayoutCount())
                 }
             }
         }

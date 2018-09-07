@@ -7,5 +7,5 @@ import javax.inject.Inject
 /**
  * Created by Hzz on 2018/8/20
  */
-class AppViewModel @Inject constructor(application: Application) : AndroidViewModel(application) {
+open class AppViewModel @Inject constructor(application: Application) : AndroidViewModel(application) {
 }
