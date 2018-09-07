@@ -1,8 +1,5 @@
 package com.ssf.commonkt.ui.main
 
-import android.databinding.DataBindingUtil.setContentView
-import android.support.v7.app.AppCompatActivity
-import android.os.Bundle
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.ssf.commonkt.R
 import com.ssf.commonkt.data.config.IRouterConfig
