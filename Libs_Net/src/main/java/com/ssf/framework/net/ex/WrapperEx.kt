@@ -40,9 +40,10 @@ public inline fun <T> Observable<T>.apply(
         // 失败回调
         noinline error: (Throwable) -> Unit = {},
         // 成功后，并执行完 success 方法后回调
-        noinline complete: () -> Unit = {}
+        noinline complete: () -> Unit = {},
+        retry: Boolean = true
 ) {
-    this.compose(ApplySchedulers())
+    this.compose(ApplySchedulers(retry))
             .compose(rx.bindUntilEvent(ActivityEvent.DESTROY))
             .subscribe(ProgressSubscriber(rx, iDialog = iDialog, responseListener = object : ResponseListener<T> {
 
@@ -82,9 +83,10 @@ public inline fun <T> Observable<Response<T>>.convert(
         // 失败回调
         noinline error: (Throwable) -> Unit = {},
         // 成功后，并执行完 success 方法后回调
-        noinline complete: () -> Unit = {}
+        noinline complete: () -> Unit = {},
+        retry: Boolean = true
 ) {
-    this.compose(ConvertSchedulers())
+    this.compose(ConvertSchedulers(retry))
             .compose(rx.bindUntilEvent(ActivityEvent.DESTROY))
             .subscribe(ProgressSubscriber(rx, iDialog = iDialog, responseListener = object :
                     ResponseListener<T> {
@@ -127,9 +129,10 @@ public inline fun <T> Observable<T>.apply(
         // 失败回调
         noinline error: (Throwable) -> Unit = {},
         // 成功后，并执行完 success 方法后回调
-        noinline complete: () -> Unit = {}
+        noinline complete: () -> Unit = {},
+        retry: Boolean = true
 ) {
-    this.compose(ApplySchedulers())
+    this.compose(ApplySchedulers(retry))
             .compose(rx.bindUntilEvent(FragmentEvent.DESTROY))
             .subscribe(ProgressSubscriber(rx.context!!, iDialog = iDialog, responseListener = object : ResponseListener<T> {
 
@@ -167,9 +170,10 @@ public inline fun <T> Observable<Response<T>>.convert(
         // 失败回调
         noinline error: (Throwable) -> Unit = {},
         // 成功后，并执行完 success 方法后回调
-        noinline complete: () -> Unit = {}
+        noinline complete: () -> Unit = {},
+        retry: Boolean = true
 ) {
-    this.compose(ConvertSchedulers())
+    this.compose(ConvertSchedulers(retry))
             .compose(rx.bindUntilEvent(FragmentEvent.DESTROY))
             .subscribe(ProgressSubscriber(rx.context!!, iDialog = iDialog, responseListener = object : ResponseListener<T> {
 
@@ -210,9 +214,10 @@ public inline fun <T> Observable<T>.apply(
         // 失败回调
         noinline error: (Throwable) -> Unit = {},
         // 成功后，并执行完 success 方法后回调
-        noinline complete: () -> Unit = {}
+        noinline complete: () -> Unit = {},
+        retry: Boolean = true
 ) {
-    this.compose(ApplySchedulers())
+    this.compose(ApplySchedulers(retry))
             .compose(rx.bindUntilEvent(FragmentEvent.DESTROY_VIEW))
             .subscribe(ProgressSubscriber(rx.context!!, iDialog = iDialog, responseListener = object : ResponseListener<T> {
 
@@ -253,9 +258,10 @@ public inline fun <T> Observable<Response<T>>.convert(
         // 失败回调
         noinline error: (Throwable) -> Unit = {},
         // 成功后，并执行完 success 方法后回调
-        noinline complete: () -> Unit = {}
+        noinline complete: () -> Unit = {},
+        retry: Boolean = true
 ) {
-    this.compose(ConvertSchedulers())
+    this.compose(ConvertSchedulers(retry))
             .compose(rx.bindUntilEvent(FragmentEvent.DESTROY_VIEW))
             .subscribe(ProgressSubscriber(rx.context!!, iDialog = iDialog, responseListener = object : ResponseListener<T> {
 
@@ -297,8 +303,8 @@ public inline fun <T> Observable<T>.wrapper(rx: RxAppCompatActivity): Observable
  * Activity扩展，加入生命周期控制，有重试操作
  * @param rx life
  */
-public inline fun <T> Observable<Response<T>>.convertRequest(rx: RxAppCompatActivity): Observable<T> {
-    return this.compose(ConvertSchedulers())
+public inline fun <T> Observable<Response<T>>.convertRequest(rx: RxAppCompatActivity, retry: Boolean = true): Observable<T> {
+    return this.compose(ConvertSchedulers(retry))
             .compose(rx.bindUntilEvent(ActivityEvent.DESTROY))
 }
 
@@ -315,8 +321,8 @@ public inline fun <T> Observable<T>.wrapper(rx: RxFragment): Observable<T> {
  * Fragment扩展，加入生命周期控制，有重试操作
  * @param rx life
  */
-public inline fun <T> Observable<Response<T>>.convertRequest(rx: RxFragment): Observable<T> {
-    return this.compose(ConvertSchedulers())
+public inline fun <T> Observable<Response<T>>.convertRequest(rx: RxFragment, retry: Boolean = true): Observable<T> {
+    return this.compose(ConvertSchedulers(retry))
             .compose(rx.bindUntilEvent(FragmentEvent.DESTROY))
 }
 
@@ -335,8 +341,8 @@ public inline fun <T> Observable<T>.wrapper(rx: RxDialogFragment): Observable<T>
  * DialogFragment扩展，加入生命周期控制，并没有重试操作
  * @param rx life
  */
-public inline fun <T> Observable<Response<T>>.convertRequest(rx: RxDialogFragment): Observable<T> {
-    return this.compose(ConvertSchedulers())
+public inline fun <T> Observable<Response<T>>.convertRequest(rx: RxDialogFragment, retry: Boolean = true): Observable<T> {
+    return this.compose(ConvertSchedulers(retry))
             .compose(rx.bindUntilEvent(FragmentEvent.DESTROY_VIEW))
 }
 
@@ -354,10 +360,11 @@ public inline fun <T1, T2> RxFragment.convertZip(
         // 失败回调
         noinline error: (Throwable) -> Unit = {},
         // 成功后，并执行完 success 方法后回调
-        noinline complete: () -> Unit = {}
+        noinline complete: () -> Unit = {},
+        retry: Boolean = true
 ) {
 
-    Observable.zip(t1.convertRequest(this), t2.convertRequest(this), BiFunction<T1, T2, ArrayList<Any>> { t1, t2 ->
+    Observable.zip(t1.convertRequest(this, retry), t2.convertRequest(this, retry), BiFunction<T1, T2, ArrayList<Any>> { t1, t2 ->
         val arrayList = ArrayList<Any>()
         arrayList.add(t1 as Any)
         arrayList.add(t2 as Any)
@@ -400,10 +407,11 @@ public inline fun <T1, T2> RxAppCompatActivity.convertZip(
         // 失败回调
         noinline error: (Throwable) -> Unit = {},
         // 成功后，并执行完 success 方法后回调
-        noinline complete: () -> Unit = {}
+        noinline complete: () -> Unit = {},
+        retry: Boolean = true
 ) {
 
-    Observable.zip(t1.convertRequest(this), t2.convertRequest(this), BiFunction<T1, T2, ArrayList<Any>> { t1, t2 ->
+    Observable.zip(t1.convertRequest(this, retry), t2.convertRequest(this, retry), BiFunction<T1, T2, ArrayList<Any>> { t1, t2 ->
         val arrayList = ArrayList<Any>()
         arrayList.add(t1 as Any)
         arrayList.add(t2 as Any)

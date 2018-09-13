@@ -15,20 +15,35 @@ import retrofit2.Response
  * @data 2018/1/11 15:28
  * @describe
  */
-class ConvertSchedulers<T> : ObservableTransformer<Response<T>,T>{
+class ConvertSchedulers<T>(private val retry: Boolean = true) : ObservableTransformer<Response<T>, T> {
     override fun apply(upstream: Observable<Response<T>>): ObservableSource<T> =
-            upstream
-//                    .delay(5, TimeUnit.SECONDS)     //请求延迟五秒，再开始
-                    .subscribeOn(Schedulers.io())
-                    .unsubscribeOn(Schedulers.io())
-                    .flatMap { response ->
-                        if (response.isSuccessful) {
-                            Observable.just(response.body()!!)
-                        } else {
-                            val code = response.code()
-                            val string = response.errorBody()!!.string()
-                            Observable.error(ApiException(CodeException.NotSuccessfulException, code, string))
-                        }
-                    }.observeOn(AndroidSchedulers.mainThread(),true)
-                    .retryWhen(RetryWhenNetwork())
+            if (retry) {
+                upstream
+                        .subscribeOn(Schedulers.io())
+                        .unsubscribeOn(Schedulers.io())
+                        .flatMap { response ->
+                            if (response.isSuccessful) {
+                                Observable.just(response.body()!!)
+                            } else {
+                                val code = response.code()
+                                val string = response.errorBody()!!.string()
+                                Observable.error(ApiException(CodeException.NotSuccessfulException, code, string))
+                            }
+                        }.observeOn(AndroidSchedulers.mainThread(), true)
+                        .retryWhen(RetryWhenNetwork())
+            } else {
+                upstream
+                        .subscribeOn(Schedulers.io())
+                        .unsubscribeOn(Schedulers.io())
+                        .flatMap { response ->
+                            if (response.isSuccessful) {
+                                Observable.just(response.body()!!)
+                            } else {
+                                val code = response.code()
+                                val string = response.errorBody()!!.string()
+                                Observable.error(ApiException(CodeException.NotSuccessfulException, code, string))
+                            }
+                        }.observeOn(AndroidSchedulers.mainThread(), true)
+            }
+
 }

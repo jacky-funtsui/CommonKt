@@ -12,12 +12,19 @@ import io.reactivex.schedulers.Schedulers
  * @data 2018/1/16 15:24
  * @describe
  */
-class ApplySchedulers<T> : ObservableTransformer<T, T> {
-    override fun apply(upstream: Observable<T>): ObservableSource<T> =
-            upstream
-                    // .delay(5, TimeUnit.SECONDS)     //请求延迟五秒，再开始
-                    .subscribeOn(Schedulers.io())
-                    .unsubscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread(), true)
-                    .retryWhen(RetryWhenNetwork())
+class ApplySchedulers<T>(private val retry: Boolean = true) : ObservableTransformer<T, T> {
+    override fun apply(upstream: Observable<T>): ObservableSource<T> = if (retry) {
+        upstream
+                // .delay(5, TimeUnit.SECONDS)     //请求延迟五秒，再开始
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread(), true)
+                .retryWhen(RetryWhenNetwork())
+    } else {
+        upstream
+                // .delay(5, TimeUnit.SECONDS)     //请求延迟五秒，再开始
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread(), true)
+    }
 }
