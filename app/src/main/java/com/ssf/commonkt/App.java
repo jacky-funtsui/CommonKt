@@ -31,6 +31,7 @@ public class App extends Application implements HasActivityInjector {
                 .inject(this);
         // ARouter
         ARouter.init(this);
+
     }
 
     @Override
