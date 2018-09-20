@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import com.ssf.framework.autolayout.utils.AutoUtils
 import com.ssf.framework.main.adapter.BaseViewHolder
 import java.lang.Exception
 
@@ -87,6 +88,8 @@ abstract class BaseBindingAdapter<T, B : ViewDataBinding>(
         // 绑定监听回调
         initializationItemClickListener(binding.root)
         // 创建
+        AutoUtils.auto(binding.root)
+        //
         return BaseBindingViewHolder(binding)
     }
 
