@@ -41,13 +41,17 @@ dependencies {
     implementation lib.ConstraintLayout
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     // 图片库
-    api  "com.ssf.framework:glide:$config.framework_glide_version"
+//    api  "com.ssf.framework:glide:$config.framework_glide_version"
+    api project(':Libs_Glide')
     // 消息推送
-    api  "com.ssf.framework:umeng:$config.framework_umeng_version"
+//    api  "com.ssf.framework:umeng:$config.framework_umeng_version"
+    api project(':Libs_Umeng')
     // 微信快捷登录等
-    api  "com.ssf.framework:social:$config.framework_social_version"
+//    api  "com.ssf.framework:social:$config.framework_social_version"
+    api project(':Libs_Social')
     // 下拉刷新 and  网络请求
-    api  "com.ssf.framework:refreshlayout:$config.framework_refreshlayout_version"
+//    api  "com.ssf.framework:refreshlayout:$config.framework_refreshlayout_version"
+    api project(':Libs_RefreshLayout')
 }
 
 apply from: 'upload_bintray.gradle'

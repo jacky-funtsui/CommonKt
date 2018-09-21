@@ -62,6 +62,7 @@ public inline fun <T> Observable<Response<T>>.convert(
         noinline error: (Throwable) -> Unit = {},
         // 成功后，并执行完 success 方法后回调
         noinline complete: () -> Unit = {},
+        // 网络失败，是否重试请求
         retry: Boolean = true
 ) {
     this.compose(ConvertSchedulers(retry))

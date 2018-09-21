@@ -30,6 +30,7 @@ import java.util.*
 /**
  * activity网络请求扩展
  */
+@Deprecated(message = "This method is no longer supported, do not use it.")
 public inline fun <T> Observable<T>.apply(
         // 必传对象，用于控制声明周期
         rx: RxAppCompatActivity,
@@ -74,6 +75,7 @@ public inline fun <T> Observable<T>.apply(
 /**
  * activity网络请求扩展
  */
+@Deprecated(message = "This method is no longer supported, do not use it.")
 public inline fun <T> Observable<Response<T>>.convert(
         // 必传对象，用于控制声明周期
         rx: RxAppCompatActivity,
@@ -121,6 +123,7 @@ public inline fun <T> Observable<Response<T>>.convert(
 /**
  * fragment网络请求扩展
  */
+@Deprecated(message = "This method is no longer supported, do not use it.")
 public inline fun <T> Observable<T>.apply(
         // 必传对象，用于控制声明周期
         rx: RxFragment,
@@ -163,6 +166,7 @@ public inline fun <T> Observable<T>.apply(
             }))
 }
 
+@Deprecated(message = "This method is no longer supported, do not use it.")
 public inline fun <T> Observable<Response<T>>.convert(
         // 必传对象，用于控制声明周期
         rx: RxFragment,
@@ -208,6 +212,7 @@ public inline fun <T> Observable<Response<T>>.convert(
 /**
  * DialogFragment网络请求扩展
  */
+@Deprecated(message = "This method is no longer supported, do not use it.")
 public inline fun <T> Observable<T>.apply(
         // 必传对象，用于控制声明周期
         rx: RxDialogFragment,
@@ -253,6 +258,7 @@ public inline fun <T> Observable<T>.apply(
 /**
  * DialogFragment网络请求扩展
  */
+@Deprecated(message = "This method is no longer supported, do not use it.")
 public inline fun <T> Observable<Response<T>>.convert(
         // 必传对象，用于控制声明周期
         rx: RxDialogFragment,
@@ -300,10 +306,22 @@ public inline fun <T> Observable<Response<T>>.convert(
  * Activity扩展，加入生命周期控制，并没有重试操作
  * @param rx life
  */
+@Deprecated(message = "This method is no longer supported, do not use it.")
 public inline fun <T> Observable<T>.wrapper(rx: RxAppCompatActivity): Observable<T> {
     return this.compose(wrapperSchedulers())
             .compose(rx.bindUntilEvent(ActivityEvent.DESTROY))
 }
+
+/**
+ * Fragment扩展，加入生命周期控制，并没有重试操作
+ * @param rx life
+ */
+@Deprecated(message = "This method is no longer supported, do not use it.")
+public inline fun <T> Observable<T>.wrapper(rx: RxFragment): Observable<T> {
+    return this.compose(wrapperSchedulers())
+            .compose(rx.bindUntilEvent(FragmentEvent.DESTROY))
+}
+
 
 /**
  * Activity扩展，加入生命周期控制，有重试操作
@@ -312,24 +330,6 @@ public inline fun <T> Observable<T>.wrapper(rx: RxAppCompatActivity): Observable
 public inline fun <T> Observable<Response<T>>.convertRequest(rx: RxAppCompatActivity, retry: Boolean = true): Observable<T> {
     return this.compose(ConvertSchedulers(retry))
             .compose(rx.bindUntilEvent(ActivityEvent.DESTROY))
-}
-
-/**
- * Fragment扩展，加入生命周期控制，并没有重试操作
- * @param rx life
- */
-public inline fun <T> Observable<T>.wrapper(rx: RxFragment): Observable<T> {
-    return this.compose(wrapperSchedulers())
-            .compose(rx.bindUntilEvent(FragmentEvent.DESTROY))
-}
-
-/**
- * Fragment扩展，加入生命周期控制，有重试操作
- * @param rx life
- */
-public inline fun <T> Observable<Response<T>>.convertRequest(rx: RxFragment, retry: Boolean = true): Observable<T> {
-    return this.compose(ConvertSchedulers(retry))
-            .compose(rx.bindUntilEvent(FragmentEvent.DESTROY))
 }
 
 
@@ -341,6 +341,17 @@ public inline fun <T> Observable<T>.wrapper(rx: RxDialogFragment): Observable<T>
     return this.compose(wrapperSchedulers())
             .compose(rx.bindUntilEvent(FragmentEvent.DESTROY_VIEW))
 }
+
+
+/**
+ * Fragment扩展，加入生命周期控制，有重试操作
+ * @param rx life
+ */
+public inline fun <T> Observable<Response<T>>.convertRequest(rx: RxFragment, retry: Boolean = true): Observable<T> {
+    return this.compose(ConvertSchedulers(retry))
+            .compose(rx.bindUntilEvent(FragmentEvent.DESTROY))
+}
+
 
 
 /**
@@ -356,6 +367,7 @@ public inline fun <T> Observable<Response<T>>.convertRequest(rx: RxDialogFragmen
 /**
  * 组合 zip操作符号
  */
+@Deprecated(message = "This method is no longer supported, do not use it.")
 public inline fun <T1, T2> RxFragment.convertZip(
         t1: Observable<Response<T1>>,
         t2: Observable<Response<T2>>,
@@ -403,6 +415,7 @@ public inline fun <T1, T2> RxFragment.convertZip(
 /**
  * 组合 zip操作符号
  */
+@Deprecated(message = "This method is no longer supported, do not use it.")
 public inline fun <T1, T2> RxAppCompatActivity.convertZip(
         t1: Observable<Response<T1>>,
         t2: Observable<Response<T2>>,

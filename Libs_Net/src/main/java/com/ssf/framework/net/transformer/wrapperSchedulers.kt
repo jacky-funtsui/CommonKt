@@ -12,6 +12,7 @@ import io.reactivex.schedulers.Schedulers
  * @data 2018/1/16 15:24
  * @describe 没有重试函数
  */
+@Deprecated(message = "This class is no longer supported, do not use it.")
 class wrapperSchedulers<T> : ObservableTransformer<T, T> {
     override fun apply(upstream: Observable<T>): ObservableSource<T> =
             upstream

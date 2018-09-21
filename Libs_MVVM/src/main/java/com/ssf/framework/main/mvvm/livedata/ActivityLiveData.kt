@@ -21,5 +21,5 @@ class ActivityLiveData : EventLiveData<ActivityLiveData.Result>() {
         postEvent(Result(CMD_FINISH_RESULT,resultCode,data))
     }
 
-    class Result(val cmd:Int, val resutCode:Int=Activity.RESULT_CANCELED, val data:Intent?=null)
+    class Result(val cmd:Int, val resultCode:Int=Activity.RESULT_CANCELED, val data:Intent?=null)
 }

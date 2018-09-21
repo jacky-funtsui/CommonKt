@@ -30,7 +30,8 @@ dependencies {
     implementation lib.SupportV7
     implementation lib.SupportRecyclerviewV7
     // 网络请求
-    api  "com.ssf.framework:net:$config.framework_net_version"
+//    api  "com.ssf.framework:net:$config.framework_net_version"
+    api project(':Libs_Net')
 }
 
 apply from: 'upload_bintray.gradle'

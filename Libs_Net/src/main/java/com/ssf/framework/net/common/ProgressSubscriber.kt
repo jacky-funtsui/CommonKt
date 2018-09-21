@@ -1,6 +1,7 @@
 package com.ssf.framework.net.common
 
 import android.content.Context
+import android.support.design.widget.CoordinatorLayout
 import android.support.v4.app.FragmentManager
 import com.ssf.framework.net.ex.IConfig.Companion.NET_PROGRESS_TAG
 import com.ssf.framework.net.interfac.IDialog
@@ -21,6 +22,7 @@ import io.reactivex.disposables.Disposable
  * @data 2018/1/11 16:04
  * @describe
  */
+@Deprecated(message = "This class is no longer supported, do not use it.")
 class ProgressSubscriber<T>(
         //上下文对象
         private val context: Context,

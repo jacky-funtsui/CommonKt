@@ -16,7 +16,7 @@ class DefaultActivityObserver(val owner: FragmentActivity) : Observer<ActivityLi
                     owner.finish()
                 }
                 ActivityLiveData.CMD_FINISH_RESULT -> {
-                    owner.setResult(it.resutCode, it.data)
+                    owner.setResult(it.resultCode, it.data)
                     owner.finish()
                 }
             }
