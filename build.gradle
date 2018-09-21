@@ -100,13 +100,13 @@ ext {
     // 窗口小组件封装  基于 autolayout、util、log
     framework_widget_version = '1.0.1'
     // 网络请求 基于 widget
-    framework_net_version = '1.0.1'
+    framework_net_version = '1.0.2'
     // 上下拉刷新 因为 XRefreshLayout 基于 net
-    framework_refreshlayout_version = '1.0.1'
+    framework_refreshlayout_version = '1.0.2'
     /**
      * framework 主工程
      * 基于 上面所有 libs
      */
-    framework_main_version = '1.0.1'
-    framework_mvvm_version = '1.0.7'
+    framework_main_version = '1.0.2'
+    framework_mvvm_version = '1.0.8'
 }

@@ -35,8 +35,8 @@ dependencies {
     implementation lib.SupportDesign
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     // framework
-//    api  "com.ssf.framework:main:$config.framework_main_version"
-    api project(':Libs_FrameWork')
+    api  "com.ssf.framework:main:$config.framework_main_version"
+//    api project(':Libs_FrameWork')
     // lifecycle
     api "android.arch.lifecycle:extensions:$lifecycle"
     //dagger

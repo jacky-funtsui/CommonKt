@@ -4,6 +4,7 @@ import com.ssf.framework.net.common.ResponseListener
 import com.ssf.framework.net.common.ResponseSubscriber
 import com.ssf.framework.net.transformer.ApplySchedulers
 import com.ssf.framework.net.transformer.ConvertSchedulers
+import com.trello.rxlifecycle2.LifecycleTransformer
 import com.trello.rxlifecycle2.components.support.RxFragment
 import com.xm.xlog.KLog
 import io.reactivex.Observable
@@ -18,6 +19,8 @@ import java.util.*
  */
 
 public inline fun <T> Observable<T>.apply(
+        // 生命周期控制
+        transformer: LifecycleTransformer<T>,
         // 成功回调
         noinline success: (T) -> Unit,
         // 失败回调
@@ -27,6 +30,7 @@ public inline fun <T> Observable<T>.apply(
         retry: Boolean = true
 ) {
     this.compose(ApplySchedulers(retry))
+            .compose(transformer)
             .subscribe(ResponseSubscriber(responseListener = object : ResponseListener<T> {
 
                 override fun onSucceed(data: T) {
@@ -56,6 +60,8 @@ public inline fun <T> Observable<T>.apply(
  * activity网络请求扩展
  */
 public inline fun <T> Observable<Response<T>>.convert(
+        // 生命周期控制
+        transformer: LifecycleTransformer<T>,
         // 成功回调
         noinline success: (T) -> Unit,
         // 失败回调
@@ -66,6 +72,7 @@ public inline fun <T> Observable<Response<T>>.convert(
         retry: Boolean = true
 ) {
     this.compose(ConvertSchedulers(retry))
+            .compose(transformer)
             .subscribe(ResponseSubscriber(responseListener = object :
                     ResponseListener<T> {
 

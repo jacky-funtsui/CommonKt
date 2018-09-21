@@ -9,6 +9,9 @@ import com.ssf.framework.net.ex.convert
 import com.ssf.framework.net.interfac.IDialog
 import com.ssf.framework.widget.state.IStateLayout
 import com.ssf.framework.widget.state.StateFrameLayout
+import com.trello.rxlifecycle2.LifecycleTransformer
+import com.trello.rxlifecycle2.android.ActivityEvent
+import com.trello.rxlifecycle2.android.FragmentEvent
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity
 import com.trello.rxlifecycle2.components.support.RxFragment
 import com.xm.xlog.KLog
@@ -22,7 +25,7 @@ import retrofit2.Response
  * @describe  上下拉刷新
  */
 
-class XRefreshLayout : android.support.v4.widget.SwipeRefreshLayout , SwipeRefreshLayout.OnRefreshListener{
+class XRefreshLayout : android.support.v4.widget.SwipeRefreshLayout, SwipeRefreshLayout.OnRefreshListener {
 
 
     companion object {
@@ -87,7 +90,7 @@ class XRefreshLayout : android.support.v4.widget.SwipeRefreshLayout , SwipeRefre
     /**
      * 手动触发下拉刷新
      */
-    fun refresh(){
+    fun refresh() {
         isRefreshing = true
         onRefresh()
     }
@@ -113,7 +116,7 @@ class XRefreshLayout : android.support.v4.widget.SwipeRefreshLayout , SwipeRefre
      * 设置加载更多
      */
     private fun setLoadMoreListener(loadMore: (Int) -> Unit) {
-        if (isLoadingMoreEnabled){
+        if (isLoadingMoreEnabled) {
             mLoadMoreRecyclerView.setLoadMoreListener {
                 KLog.i(TAG, "加载更多 page：$mPagerNo")
                 mPagerNo++
@@ -125,9 +128,9 @@ class XRefreshLayout : android.support.v4.widget.SwipeRefreshLayout , SwipeRefre
     /**
      * 请求网络 RxAppCompatActivity
      */
-    private fun <T> request(request: (Int) -> Observable<Response<T>>, success: (T, Int) -> Unit, error: (Throwable) -> Unit = {}) {
+    private fun <T> request(transformer: LifecycleTransformer<T>, request: (Int) -> Observable<Response<T>>, success: (T, Int) -> Unit, error: (Throwable) -> Unit = {}) {
         request(mPagerNo)
-                .convert(success = {
+                .convert(transformer,success = {
                     // 隐藏状态布局
                     if (mStateLayout.stateLayout == IStateLayout.LOADING) {
                         mStateLayout.stateLayout = IStateLayout.NORMAL
@@ -162,7 +165,7 @@ class XRefreshLayout : android.support.v4.widget.SwipeRefreshLayout , SwipeRefre
     }
 
 
-    fun <T> setRefreshListener(request: (Int) -> Observable<Response<T>>, success: (T, Int) -> Unit, error: (Throwable) -> Unit = {}) {
+    fun <T> setRefreshListener(transformer: LifecycleTransformer<T>, request: (Int) -> Observable<Response<T>>, success: (T, Int) -> Unit, error: (Throwable) -> Unit = {}) {
         // 首次请求
         if (!isRefreshing) {
             // 状态布局
@@ -170,27 +173,29 @@ class XRefreshLayout : android.support.v4.widget.SwipeRefreshLayout , SwipeRefre
             findViewById<Button>(R.id.arr_btn_onload).setOnClickListener {
                 mPagerNo = 1
                 mStateLayout.stateLayout = IStateLayout.LOADING
-                request(request, success, error)
+                request(transformer, request, success, error)
             }
             // 请求
-            request(request, success, error)
+            request(transformer, request, success, error)
         }
         // 下拉刷新
         setRefreshListener {
-            request(request, success, error)
+            request(transformer, request, success, error)
         }
         // 加载更多
         setLoadMoreListener {
-            request(request, success, error)
+            request(transformer, request, success, error)
         }
     }
 
     fun <T> setRefreshListener(fragment: RxFragment, request: (Int) -> Observable<Response<T>>, success: (T, Int) -> Unit, error: (Throwable) -> Unit = {}) {
-        setRefreshListener(request,success,error)
+        val rx = fragment.bindUntilEvent<T>(FragmentEvent.DESTROY)
+        setRefreshListener(rx, request, success, error)
     }
 
     fun <T> setRefreshListener(activity: RxAppCompatActivity, request: (Int) -> Observable<Response<T>>, success: (T, Int) -> Unit, error: (Throwable) -> Unit = {}) {
-        setRefreshListener(request,success,error)
+        val rx = activity.bindUntilEvent<T>(ActivityEvent.DESTROY)
+        setRefreshListener(rx,request, success, error)
     }
 
 
