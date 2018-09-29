@@ -108,5 +108,5 @@ ext {
      * 基于 上面所有 libs
      */
     framework_main_version = '1.0.2'
-    framework_mvvm_version = '1.0.8'
+    framework_mvvm_version = '1.0.9'
 }
