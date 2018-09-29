@@ -11,7 +11,8 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import com.ssf.framework.autolayout.utils.AutoUtils
 import com.ssf.framework.main.adapter.BaseViewHolder
-import java.lang.Exception
+import java.util.LinkedHashSet
+import kotlin.collections.ArrayList
 
 /**
  * @atuthor ydm
@@ -23,15 +24,29 @@ abstract class BaseBindingAdapter<T, B : ViewDataBinding>(
         private val layoutID: Int,
         val list: ArrayList<T> = ArrayList(),
         // Item点击监听回调
-        var itemClickListener: BaseBindingAdapter.OnItemClickListener<T>? = null,
-        // layout 上 绑定的监听id
-        vararg var clickIDs: Int
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+        var itemClickListener: BaseBindingAdapter.OnItemClickListener<T>? = null) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
         const val VIEW_TYPE_HEADER = -100
         const val VIEW_TYPE_FOOTER = -101
     }
+
+    //兼容旧API,保存childItem点击事件
+    protected val clickIDs by lazy { LinkedHashSet<Int>() }
+
+    @Deprecated("给子布局设置监听，请使用holder中的addClickListener方法,会回调在OnItemChildClickListener中")
+    constructor(context: Context, layoutID: Int, list: ArrayList<T> = ArrayList(), itemClickListener: BaseBindingAdapter.OnItemClickListener<T>? = null, vararg clickIDs: Int) : this(context, layoutID, list, itemClickListener) {
+        //兼容旧API
+        clickIDs.forEach {
+            if (it > 0) {
+                this.clickIDs.add(it)
+            }
+        }
+    }
+
+    var itemLongClickListener: OnItemLongClickListener<T>? = null
+    var itemChildClickListener: OnItemChildClickListener<T>? = null
+    var itemChildLongClickListener: OnItemChildLongClickListener<T>? = null
 
     private var mHeaderLayout: LinearLayout? = null
     private var mFooterLayout: LinearLayout? = null
@@ -85,8 +100,7 @@ abstract class BaseBindingAdapter<T, B : ViewDataBinding>(
     private fun createBindingViewHolder(parent: ViewGroup, viewType: Int): BaseBindingViewHolder<B> {
         val layoutId = getLayoutId(viewType)
         val binding = DataBindingUtil.inflate<B>(layoutInflater, layoutId, parent, false)
-        // 绑定监听回调
-        initializationItemClickListener(binding.root)
+                ?: throw RuntimeException("layoutID 必须是以根布局为<layout/>的DataBinding方式创建")
         // 创建
         AutoUtils.auto(binding.root)
         //
@@ -105,14 +119,14 @@ abstract class BaseBindingAdapter<T, B : ViewDataBinding>(
                 onBindBindingViewHolder(holder as BaseBindingViewHolder<B>, position - getHeaderLayoutCount())
             }
         }
-
     }
 
     open fun onBindBindingViewHolder(holder: BaseBindingViewHolder<B>, position: Int) {
         holder.binding.root.tag = position
         val bean = list[position]
+        convertBefore(holder, bean, position)
         convert(holder, bean, position)
-        holder.binding.executePendingBindings()
+        convertAfter(holder, bean, position)
     }
 
     override fun getItemCount(): Int {
@@ -158,38 +172,115 @@ abstract class BaseBindingAdapter<T, B : ViewDataBinding>(
     }
 
     /**
-     *  初始化Item 回调
+     * 数据绑定前的操作
+     */
+    protected open fun convertBefore(holder: BaseBindingViewHolder<B>, bean: T, position: Int) {
+
+    }
+
+    abstract fun convert(holder: BaseBindingViewHolder<B>, bean: T, position: Int)
+
+    /**
+     * 数据绑定后的操作
+     */
+    protected open fun convertAfter(holder: BaseBindingViewHolder<B>, bean: T, position: Int) {
+        // 绑定监听回调
+        initializationItemListener(holder.itemView, holder, position)
+        holder.binding.executePendingBindings()
+    }
+
+    /**
+     *  初始化Item监听
      *  @param inflate   绑定的布局
      */
-    private fun initializationItemClickListener(inflate: View) {
-        if (clickIDs.isEmpty()) {
+    protected open fun initializationItemListener(inflate: View, holder: BaseBindingViewHolder<B>, position: Int) {
+        initializationItemClickListener(inflate, holder, position)//item监听
+        initializationItemChildClickListener(inflate, holder, position)//childItem监听
+    }
+
+    /**
+     *  Item 点击回调
+     *  @param inflate   绑定的布局
+     */
+    protected open fun initializationItemClickListener(inflate: View, holder: BaseBindingViewHolder<B>, position: Int) {
+        //点击
+        itemClickListener?.let {
             // 给 root item 设置监听
             inflate.setOnClickListener {
-                clickCallback(inflate, it)
+                notifyItemClick(inflate, position)
             }
-        } else {
-            // 给 item 上面的 子 view 设置监听
-            clickIDs.forEach {
-                inflate.findViewById<View>(it)?.setOnClickListener {
-                    clickCallback(inflate, it)
+
+            //兼容以前的逻辑, 给item上面的子view 设置监听
+            if (clickIDs.isNotEmpty()) {
+                //如果没有设置itemClickListener兼容回调到原来的itemListener
+                if (itemChildClickListener == null) {
+                    clickIDs.forEach {
+                        inflate.findViewById<View>(it)?.setOnClickListener {
+                            notifyItemClick(it, position)
+                        }
+                    }
+                } else {
+                    //有设置itemChildClickListener后就回调到childItem的监听
+                    clickIDs.forEach {
+                        if (it > 0) {
+                            holder.addOnClickListener(it) //注册事件
+                        }
+                    }
+                }
+            }
+        }
+
+        //长按
+        itemLongClickListener?.let {
+            inflate.setOnLongClickListener {
+                notifyItemLongClick(inflate, position)
+            }
+        }
+    }
+
+    protected open fun notifyItemClick(view: View, position: Int) {
+        itemClickListener?.click(view, this, list[position], position)
+    }
+
+    protected open fun notifyItemLongClick(view: View, position: Int): Boolean {
+        return itemLongClickListener?.onLongClick(view, this, list[position], position) ?: false
+    }
+
+    /**
+     * Item 子View点击回调
+     */
+    protected open fun initializationItemChildClickListener(inflate: View, holder: BaseBindingViewHolder<B>, position: Int) {
+        //点击
+        itemChildClickListener?.let {
+            holder.childClickViewIds.forEach {
+                if (it > 0) {
+                    inflate.findViewById<View>(it)?.setOnClickListener {
+                        notifyItemChildClick(it, position)
+                    }
+                }
+            }
+        }
+
+        //长按
+        itemChildLongClickListener?.let {
+            holder.childLongClickViewIds.forEach {
+                if (it > 0) {
+                    inflate.findViewById<View>(it)?.setOnLongClickListener {
+                        notifyItemChildLongClick(it, position)
+                    }
                 }
             }
         }
     }
 
-    /** 监听到点击事件后，回调 */
-    private fun clickCallback(inflate: View, it: View) {
-        val pos = inflate.tag
-        if (pos is Int) {
-            //回调
-            itemClickListener?.click(it, this, list[pos], pos)
-        } else {
-            throw Exception("root item 请勿使用setTag操作,影响逻辑")
-        }
+    protected open fun notifyItemChildClick(view: View, position: Int) {
+        itemChildClickListener?.onItemChildClick(view, this, list[position], position)
     }
 
-    protected abstract fun convert(holder: BaseBindingViewHolder<B>, bean: T, position: Int)
-
+    protected open fun notifyItemChildLongClick(view: View, position: Int): Boolean {
+        return itemChildLongClickListener?.onItemChildLongClick(view, this, list[position], position)
+                ?: false
+    }
 
     /**
      * 添加头部
@@ -310,6 +401,18 @@ abstract class BaseBindingAdapter<T, B : ViewDataBinding>(
          *  @param position  点击的item
          */
         fun click(view: View, adapter: BaseBindingAdapter<T, *>, bean: T, position: Int)
+    }
+
+    interface OnItemLongClickListener<T> {
+        fun onLongClick(view: View, adapter: BaseBindingAdapter<T, *>, bean: T, position: Int): Boolean
+    }
+
+    interface OnItemChildClickListener<T> {
+        fun onItemChildClick(view: View, adapter: BaseBindingAdapter<T, *>, bean: T, position: Int)
+    }
+
+    interface OnItemChildLongClickListener<T> {
+        fun onItemChildLongClick(view: View, adapter: BaseBindingAdapter<T, *>, bean: T, position: Int): Boolean
     }
 }
 
