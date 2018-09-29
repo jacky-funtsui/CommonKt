@@ -13,7 +13,7 @@ abstract class BaseDelegateBindingAdapter<T>(context: Context) : BaseMultiBindin
     /**
      * 多布局ItemProvider
      */
-    private val providerDelegate: ProviderDelegate by lazy { createProviderDelegate() }
+    protected val providerDelegate: ProviderDelegate by lazy { createProviderDelegate() }
 
     /**
      * 在复写getMultiLayoutId方法中返回对应的viewType

@@ -93,11 +93,11 @@ abstract class BaseBindingAdapter<T, B : ViewDataBinding>(
         }
     }
 
-    private fun createBaseViewHolder(parent: ViewGroup, viewType: Int, itemView: View): BaseViewHolder {
+    protected open fun createBaseViewHolder(parent: ViewGroup, viewType: Int, itemView: View): BaseViewHolder {
         return BaseViewHolder(itemView)
     }
 
-    private fun createBindingViewHolder(parent: ViewGroup, viewType: Int): BaseBindingViewHolder<B> {
+    protected open fun createBindingViewHolder(parent: ViewGroup, viewType: Int): BaseBindingViewHolder<B> {
         val layoutId = getLayoutId(viewType)
         val binding = DataBindingUtil.inflate<B>(layoutInflater, layoutId, parent, false)
                 ?: throw RuntimeException("layoutID 必须是以根布局为<layout/>的DataBinding方式创建")
@@ -122,7 +122,6 @@ abstract class BaseBindingAdapter<T, B : ViewDataBinding>(
     }
 
     open fun onBindBindingViewHolder(holder: BaseBindingViewHolder<B>, position: Int) {
-        holder.binding.root.tag = position
         val bean = list[position]
         convertBefore(holder, bean, position)
         convert(holder, bean, position)

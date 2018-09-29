@@ -28,7 +28,6 @@ abstract class BaseMultiBindingAdapter<T>(context: Context, list: ArrayList<T> =
     abstract fun getMultiLayoutId(data: T): Int
 
     override fun onBindBindingViewHolder(holder: BaseBindingViewHolder<ViewDataBinding>, position: Int) {
-        holder.binding.root.tag = position
         val bean = list[position]
         convertBefore(holder, bean, position)
         convert(holder, bean, position)
