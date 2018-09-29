@@ -27,6 +27,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.main.MainActivity"/>
+        <activity android:name=".ui.simple.SimpleListAdapterActivity"/>
+        <activity android:name=".ui.simple.SimpleSupportAdapterActivity"/>
+        <activity android:name=".ui.simple.SimpleHeaderFooterActivity"/>
+        <activity android:name=".ui.simple.SimpleMultiAdapterActivity"/>
+        <activity android:name=".ui.simple.SimpleDelegateAdapterActivity"/>
     </application>
 
 </manifest>
