@@ -140,7 +140,7 @@ public inline fun <T> Observable<T>.apply(
 ) {
     this.compose(ApplySchedulers(retry))
             .compose(rx.bindUntilEvent(FragmentEvent.DESTROY))
-            .subscribe(ProgressSubscriber(rx.context!!, iDialog = iDialog, responseListener = object : ResponseListener<T> {
+            .subscribe(ProgressSubscriber(rx.activity!!, iDialog = iDialog, responseListener = object : ResponseListener<T> {
 
                 override fun onSucceed(data: T) {
                     try {
@@ -183,7 +183,7 @@ public inline fun <T> Observable<Response<T>>.convert(
 ) {
     this.compose(ConvertSchedulers(retry))
             .compose(rx.bindUntilEvent(FragmentEvent.DESTROY))
-            .subscribe(ProgressSubscriber(rx.context!!, iDialog = iDialog, responseListener = object : ResponseListener<T> {
+            .subscribe(ProgressSubscriber(rx.activity!!, iDialog = iDialog, responseListener = object : ResponseListener<T> {
 
                 override fun onSucceed(data: T) {
                     try {
@@ -229,7 +229,7 @@ public inline fun <T> Observable<T>.apply(
 ) {
     this.compose(ApplySchedulers(retry))
             .compose(rx.bindUntilEvent(FragmentEvent.DESTROY_VIEW))
-            .subscribe(ProgressSubscriber(rx.context!!, iDialog = iDialog, responseListener = object : ResponseListener<T> {
+            .subscribe(ProgressSubscriber(rx.activity!!, iDialog = iDialog, responseListener = object : ResponseListener<T> {
 
                 override fun onSucceed(data: T) {
                     try {
@@ -275,7 +275,7 @@ public inline fun <T> Observable<Response<T>>.convert(
 ) {
     this.compose(ConvertSchedulers(retry))
             .compose(rx.bindUntilEvent(FragmentEvent.DESTROY_VIEW))
-            .subscribe(ProgressSubscriber(rx.context!!, iDialog = iDialog, responseListener = object : ResponseListener<T> {
+            .subscribe(ProgressSubscriber(rx.activity!!, iDialog = iDialog, responseListener = object : ResponseListener<T> {
 
                 override fun onSucceed(data: T) {
                     try {
@@ -387,7 +387,7 @@ public inline fun <T1, T2> RxFragment.convertZip(
         arrayList.add(t1 as Any)
         arrayList.add(t2 as Any)
         arrayList
-    }).subscribe(ProgressSubscriber(context!!, iDialog, responseListener = object : ResponseListener<ArrayList<Any>> {
+    }).subscribe(ProgressSubscriber(activity!!, iDialog, responseListener = object : ResponseListener<ArrayList<Any>> {
         override fun onSucceed(data: ArrayList<Any>) {
             try {
                 success(data[0] as T1, data[1] as T2)

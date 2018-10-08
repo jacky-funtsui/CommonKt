@@ -1,5 +1,6 @@
 package com.ssf.framework.net.common
 
+import android.app.Activity
 import android.content.Context
 import android.support.design.widget.CoordinatorLayout
 import android.support.v4.app.FragmentManager
@@ -25,7 +26,7 @@ import io.reactivex.disposables.Disposable
 @Deprecated(message = "This class is no longer supported, do not use it.")
 class ProgressSubscriber<T>(
         //上下文对象
-        private val context: Context,
+        private val activity: Activity,
         /* 显示dialog的方式 */
         private val iDialog: IDialog = IDialog.UN_LOADING,
         /* 回调 */
@@ -34,7 +35,7 @@ class ProgressSubscriber<T>(
     /* Disposable */
     private var disposable: Disposable? = null
     /* 加载进度条 */
-    private val progressDialog by lazy { ProgressDialog(context) }
+    private val progressDialog by lazy { ProgressDialog(activity) }
 
     override fun onSubscribe(d: Disposable) {
         disposable = d
@@ -71,11 +72,13 @@ class ProgressSubscriber<T>(
                     //什么都不干，暂时
                 }
              }
-            progressDialog.show()
-            progressDialog.setDismissCallback {
-                if (disposable != null) {
-                    KLog.i("销毁进度条，并关闭异步!!!")
-                    disposable?.dispose()
+            if (!activity.isFinishing){
+                progressDialog.show()
+                progressDialog.setDismissCallback {
+                    if (disposable != null) {
+                        KLog.i("销毁进度条，并关闭异步!!!")
+                        disposable?.dispose()
+                    }
                 }
             }
         }
