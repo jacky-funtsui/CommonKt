@@ -138,6 +138,6 @@ dependencies {
     // tinker 热修复 <按需>
     implementation  "com.ssf.framework:tinker:$config.framework_tinker_version"
     // frameWork
-//    implementation  "com.ssf.framework:mvvm:$config.framework_mvvm_version"
-    implementation project(':Libs_MVVM')
+    implementation  "com.ssf.framework:mvvm:$config.framework_mvvm_version"
+//    implementation project(':Libs_MVVM')
 }
