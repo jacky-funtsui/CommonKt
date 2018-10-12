@@ -1,16 +1,16 @@
 package com.ssf.framework.net.common
 
+import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.ssf.framework.net.ex.IConfig
 import com.ssf.framework.net.interceptor.HeaderInterceptor
 import com.xm.xlog.KLog
-import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
-import java.util.HashMap
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 
@@ -28,9 +28,16 @@ class RetrofitClient {
             KLog.i("创建 createRetrofit")
             // 构建 log
             val loggingInterceptor = if (builder.debug) {
-                HttpLoggingInterceptor({
-                    KLog.i(IConfig.tag,it)
-                })
+                HttpLoggingInterceptor {
+                    // 以{}或者[]形式的说明是响应结果的json数据，需要进行格式化
+                    if ((it.startsWith("{") && it.endsWith("}")
+                                    || (it.startsWith("[") && it.endsWith("]")))) {
+                        KLog.json(IConfig.tag, it)
+                    } else {
+                        KLog.i(IConfig.tag, it)
+                    }
+
+                }
             } else {
                 null
             }
@@ -42,6 +49,7 @@ class RetrofitClient {
                     .connectTimeout(builder.connectionTimeout, TimeUnit.SECONDS)
             // header
             okHttpBuilder.addInterceptor(HeaderInterceptor(builder.headers))
+                    .addNetworkInterceptor(StethoInterceptor()) //添加fackebook Stetho
             // log
             loggingInterceptor?.apply {
                 level = HttpLoggingInterceptor.Level.BODY

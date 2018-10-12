@@ -14,7 +14,7 @@ android {
         targetSdkVersion config.targetSdkVersion
         versionCode 1
         versionName config.framework_net_version
-//        versionName "1.0.3"
+//        versionName "1.0.6"
     }
 
     buildTypes {
@@ -22,6 +22,10 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+
+    lintOptions {
+        abortOnError false
     }
 
 }
@@ -53,6 +57,7 @@ dependencies {
     //OKHTTP 拦截器，主要用于输出日志
     api "com.squareup.okhttp3:okhttp:$okhttp_version"
     implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
+    implementation 'com.facebook.stetho:stetho-okhttp3:1.5.0'
     // rxcache
     api 'com.github.VictorAlbertos.RxCache:runtime:1.8.3-2.x'
     // To use Gson
