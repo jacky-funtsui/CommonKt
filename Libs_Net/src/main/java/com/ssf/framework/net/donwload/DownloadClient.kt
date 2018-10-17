@@ -187,7 +187,7 @@ class DownloadClient(
      * 暂停下载
      * @param downInfo 操作的对象类
      */
-    private fun pause(downInfo: DownInfo) {
+    fun pause(downInfo: DownInfo) {
         downInfo.downState = DownState.PAUSE.state
         //关闭流
         val subscriber = downInfo.downloadSubscriber
@@ -218,7 +218,7 @@ class DownloadClient(
      * @param downloadUrl 下载地址
      * @param fileName    保存的文件名，不传为 下载程序自动判断
      */
-    private fun queryDownInfo(downloadUrl: String, fileName: String? = null):DownInfo{
+    fun queryDownInfo(downloadUrl: String, fileName: String? = null):DownInfo{
         val query = DownloadFileUtil.queryDownInfo(context, downloadUrl, fileName)
         val infos = findDownInfos(downloadUrl)
         if (query != null){
@@ -273,6 +273,18 @@ class DownloadClient(
             DownState.FINISH -> EventBus.getDefault().post(downInfo)
             else -> KLog.e("other")
         }
+    }
+
+    /**
+     * 移除队列，不再下载
+     */
+    fun remove(downloadUrl: String, fileName: String? = null) {
+        // 查询最新
+        val downInfo = queryDownInfo(downloadUrl, fileName)
+        // 暂停
+        pause(downInfo)
+        // 移除
+        DownInfoDbUtil.getInstance(context).delete(downInfo)
     }
 
 

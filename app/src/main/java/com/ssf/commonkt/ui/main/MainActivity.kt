@@ -30,9 +30,9 @@ class MainActivity : MVVMActivity<ActivityMainBinding>(R.layout.activity_main), 
     }
 
     override fun init() {
+        // 多布局
         rv.layoutManager = LinearLayoutManager(this)
         rv.adapter = mAdapter
-
         mAdapter.list.add(Bean("常规Adapter", SimpleListAdapterActivity::class.java))
         mAdapter.list.add(Bean("兼容ClickIds Adapter", SimpleSupportAdapterActivity::class.java))
         mAdapter.list.add(Bean("头部尾部Adapter", SimpleHeaderFooterActivity::class.java))
