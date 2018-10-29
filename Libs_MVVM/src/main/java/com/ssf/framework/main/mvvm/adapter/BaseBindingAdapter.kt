@@ -206,7 +206,7 @@ abstract class BaseBindingAdapter<T, B : ViewDataBinding>(
         itemClickListener?.let {
             // 给 root item 设置监听
             inflate.setOnClickListener {
-                notifyItemClick(inflate, position)
+                notifyItemClick(inflate, holder)
             }
 
             //兼容以前的逻辑, 给item上面的子view 设置监听
@@ -215,7 +215,7 @@ abstract class BaseBindingAdapter<T, B : ViewDataBinding>(
                 if (itemChildClickListener == null) {
                     clickIDs.forEach {
                         inflate.findViewById<View>(it)?.setOnClickListener {
-                            notifyItemClick(it, position)
+                            notifyItemClick(it, holder)
                         }
                     }
                 } else {
@@ -232,16 +232,18 @@ abstract class BaseBindingAdapter<T, B : ViewDataBinding>(
         //长按
         itemLongClickListener?.let {
             inflate.setOnLongClickListener {
-                notifyItemLongClick(inflate, position)
+                notifyItemLongClick(inflate, holder)
             }
         }
     }
 
-    protected open fun notifyItemClick(view: View, position: Int) {
+    protected open fun notifyItemClick(view: View, holder: BaseBindingViewHolder<B>) {
+        val position = getViewHolderLayoutPosition(holder)
         itemClickListener?.click(view, this, list[position], position)
     }
 
-    protected open fun notifyItemLongClick(view: View, position: Int): Boolean {
+    protected open fun notifyItemLongClick(view: View, holder: BaseBindingViewHolder<B>): Boolean {
+        val position = getViewHolderLayoutPosition(holder)
         return itemLongClickListener?.onLongClick(view, this, list[position], position) ?: false
     }
 
@@ -254,7 +256,7 @@ abstract class BaseBindingAdapter<T, B : ViewDataBinding>(
             holder.childClickViewIds.forEach {
                 if (it > 0) {
                     inflate.findViewById<View>(it)?.setOnClickListener {
-                        notifyItemChildClick(it, position)
+                        notifyItemChildClick(it, holder)
                     }
                 }
             }
@@ -265,20 +267,26 @@ abstract class BaseBindingAdapter<T, B : ViewDataBinding>(
             holder.childLongClickViewIds.forEach {
                 if (it > 0) {
                     inflate.findViewById<View>(it)?.setOnLongClickListener {
-                        notifyItemChildLongClick(it, position)
+                        notifyItemChildLongClick(it, holder)
                     }
                 }
             }
         }
     }
 
-    protected open fun notifyItemChildClick(view: View, position: Int) {
+    protected open fun notifyItemChildClick(view: View, holder: BaseBindingViewHolder<B>) {
+        val position = getViewHolderLayoutPosition(holder)
         itemChildClickListener?.onItemChildClick(view, this, list[position], position)
     }
 
-    protected open fun notifyItemChildLongClick(view: View, position: Int): Boolean {
+    protected open fun notifyItemChildLongClick(view: View, holder: BaseBindingViewHolder<B>): Boolean {
+        val position = getViewHolderLayoutPosition(holder)
         return itemChildLongClickListener?.onItemChildLongClick(view, this, list[position], position)
                 ?: false
+    }
+
+    protected open fun getViewHolderLayoutPosition(holder: BaseBindingViewHolder<B>): Int {
+        return holder.layoutPosition - getHeaderLayoutCount()
     }
 
     /**

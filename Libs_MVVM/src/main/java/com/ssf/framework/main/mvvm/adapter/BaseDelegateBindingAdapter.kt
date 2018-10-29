@@ -46,7 +46,7 @@ abstract class BaseDelegateBindingAdapter<T>(context: Context) : BaseMultiBindin
             if (itemChildClickListener == null && holder.childClickViewIds.isNotEmpty()) {
                 holder.childClickViewIds.forEach {
                     inflate.findViewById<View>(it)?.setOnClickListener {
-                        notifyItemChildClick(it, position)
+                        notifyItemChildClick(it, holder)
                     }
                 }
             }
@@ -54,25 +54,27 @@ abstract class BaseDelegateBindingAdapter<T>(context: Context) : BaseMultiBindin
             if (itemChildLongClickListener == null && holder.childLongClickViewIds.isNotEmpty()) {
                 holder.childLongClickViewIds.forEach {
                     inflate.findViewById<View>(it)?.setOnLongClickListener {
-                        notifyItemChildLongClick(it, position)
+                        notifyItemChildLongClick(it, holder)
                     }
                 }
             }
         }
     }
 
-    override fun notifyItemChildClick(view: View, position: Int) {
+    override fun notifyItemChildClick(view: View, holder: BaseBindingViewHolder<ViewDataBinding>) {
+        val position = getViewHolderLayoutPosition(holder)
         //回调监听到Provider
         val itemProvider = providerDelegate.itemProviders.get(getDefItemViewType(position))
-        itemProvider?.onClick(view, list[position], position)
-        super.notifyItemChildClick(view, position)
+        itemProvider?.onClick(view,holder, list[position], position)
+        super.notifyItemChildClick(view, holder)
     }
 
-    override fun notifyItemChildLongClick(view: View, position: Int): Boolean {
+    override fun notifyItemChildLongClick(view: View, holder: BaseBindingViewHolder<ViewDataBinding>): Boolean {
+        val position = getViewHolderLayoutPosition(holder)
         //回调监听到Provider
         val itemProvider = providerDelegate.itemProviders.get(getDefItemViewType(position))
-        itemProvider?.onLongClick(view, list[position], position)
-        return super.notifyItemLongClick(view, position)
+        itemProvider?.onLongClick(view, holder,list[position], position)
+        return super.notifyItemLongClick(view, holder)
     }
 
 }
