@@ -11,11 +11,11 @@ abstract class BaseItemProvider<T, BindingHolder : BaseBindingViewHolder<*>> {
     abstract fun layout(): Int
     abstract fun convert(holder: BindingHolder, data: T, position: Int)
 
-    open fun onClick(view: View, data: T, position: Int) {
+    open fun onClick(view: View, holder: BindingHolder, data: T, position: Int) {
 
     }
 
-    open fun onLongClick(view: View, data: T, position: Int) {
+    open fun onLongClick(view: View, holder: BindingHolder, data: T, position: Int) {
 
     }
 }
