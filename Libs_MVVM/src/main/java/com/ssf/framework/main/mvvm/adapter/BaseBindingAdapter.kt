@@ -122,7 +122,7 @@ abstract class BaseBindingAdapter<T, B : ViewDataBinding>(
     }
 
     open fun onBindBindingViewHolder(holder: BaseBindingViewHolder<B>, position: Int) {
-        val bean = list[position]
+        val bean = list[position] ?: return
         convertBefore(holder, bean, position)
         convert(holder, bean, position)
         convertAfter(holder, bean, position)
