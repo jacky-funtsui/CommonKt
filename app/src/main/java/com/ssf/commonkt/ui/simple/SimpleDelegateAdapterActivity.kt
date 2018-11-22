@@ -90,8 +90,8 @@ class SimpleDelegateAdapterActivity : BaseActivity(R.layout.simple_recycler) {
         override fun convert(holder: BaseBindingViewHolder<Item1Binding>, data: Int, position: Int) {
         }
 
-        override fun onClick(view: View, data: Int, position: Int) {
-            super.onClick(view, data, position)
+        override fun onClick(view: View, holder: BaseBindingViewHolder<Item1Binding>, data: Int, position: Int) {
+            super.onClick(view, holder, data, position)
             view.context.toast("点击了Provider1 child")
         }
     }
@@ -104,13 +104,13 @@ class SimpleDelegateAdapterActivity : BaseActivity(R.layout.simple_recycler) {
         override fun convert(holder: BaseBindingViewHolder<Item2Binding>, data: Int, position: Int) {
         }
 
-        override fun onClick(view: View, data: Int, position: Int) {
-            super.onClick(view, data, position)
+        override fun onClick(view: View, holder: BaseBindingViewHolder<Item2Binding>, data: Int, position: Int) {
+            super.onClick(view, holder, data, position)
             view.context.toast("点击了Provider2 child")
         }
 
-        override fun onLongClick(view: View, data: Int, position: Int) {
-            super.onLongClick(view, data, position)
+        override fun onLongClick(view: View, holder: BaseBindingViewHolder<Item2Binding>, data: Int, position: Int) {
+            super.onLongClick(view, holder, data, position)
             view.context.toast("长按了Provider2 child")
         }
     }
@@ -123,8 +123,8 @@ class SimpleDelegateAdapterActivity : BaseActivity(R.layout.simple_recycler) {
         override fun convert(holder: BaseBindingViewHolder<Item3Binding>, data: Int, position: Int) {
         }
 
-        override fun onClick(view: View, data: Int, position: Int) {
-            super.onClick(view, data, position)
+        override fun onClick(view: View, holder: BaseBindingViewHolder<Item3Binding>, data: Int, position: Int) {
+            super.onClick(view, holder, data, position)
             view.context.toast("点击了Provider3 child")
         }
     }
@@ -137,8 +137,8 @@ class SimpleDelegateAdapterActivity : BaseActivity(R.layout.simple_recycler) {
         override fun convert(holder: BaseBindingViewHolder<Item4Binding>, data: Int, position: Int) {
         }
 
-        override fun onClick(view: View, data: Int, position: Int) {
-            super.onClick(view, data, position)
+        override fun onClick(view: View, holder: BaseBindingViewHolder<Item4Binding>, data: Int, position: Int) {
+            super.onClick(view, holder, data, position)
             view.context.toast("点击了Provider4 child")
         }
     }

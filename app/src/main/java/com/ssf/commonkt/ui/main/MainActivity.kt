@@ -23,6 +23,7 @@ class MainActivity : MVVMActivity<ActivityMainBinding>(R.layout.activity_main), 
         startActivity(Intent(this, bean.target))
     }
 
+    private val vm by lazy { viewModelProvider.get(MainViewModel::class.java) }
     private val rv by bindView<RecyclerView>(R.id.rv)
     private val mAdapter by lazy { SimpleListAdapter(this, this) }
     override fun initStatusBar() {
@@ -30,15 +31,10 @@ class MainActivity : MVVMActivity<ActivityMainBinding>(R.layout.activity_main), 
     }
 
     override fun init() {
+        binding.viewModel = vm
         // 多布局
         rv.layoutManager = LinearLayoutManager(this)
         rv.adapter = mAdapter
-        mAdapter.list.add(Bean("常规Adapter", SimpleListAdapterActivity::class.java))
-        mAdapter.list.add(Bean("兼容ClickIds Adapter", SimpleSupportAdapterActivity::class.java))
-        mAdapter.list.add(Bean("头部尾部Adapter", SimpleHeaderFooterActivity::class.java))
-        mAdapter.list.add(Bean("多布局MultiAdapter", SimpleMultiAdapterActivity::class.java))
-        mAdapter.list.add(Bean("多布局DelegateAdapter", SimpleDelegateAdapterActivity::class.java))
-        mAdapter.notifyDataSetChanged()
     }
 
     class SimpleListAdapter(context: Context, itemClickListener: OnItemClickListener<Bean>) : BaseBindingAdapter<Bean, Item1Binding>(context, R.layout.item_1, itemClickListener = itemClickListener) {
@@ -47,5 +43,5 @@ class MainActivity : MVVMActivity<ActivityMainBinding>(R.layout.activity_main), 
         }
     }
 
-    class Bean(val name: String, val target: Class<*>)
+    class Bean(var name: String, val target: Class<*>)
 }
