@@ -10,9 +10,9 @@ import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.BiFunction
-import retrofit2.Response
-import java.util.ArrayList
 import io.reactivex.functions.Function3
+import retrofit2.Response
+import java.util.*
 
 /**
  * @atuthor dm
@@ -42,25 +42,27 @@ public inline fun <T1, T2> BaseViewModel.convertZip(
         crossinline success: (T1, T2) -> Unit,
         // 失败回调
         noinline error: (Throwable) -> Unit = {},
-        // 成功后，并执行完 success 方法后回调
+        // 无论成功失败，之后都会调用
         noinline complete: () -> Unit = {},
         // 网络失败，是否重试请求
-        retry: Boolean = true
+        retry: Boolean = true,
+        //loading显示内容
+        message: String = "loading"
 ) {
     Observable.zip(
             t1.convertRequest(bindUntilEvent(ViewModelEvent.CLEAR), retry),
             t2.convertRequest(bindUntilEvent(ViewModelEvent.CLEAR), retry),
             BiFunction<T1, T2, ArrayList<Any>> { t1, t2 ->
-        val arrayList = ArrayList<Any>()
-        arrayList.add(t1 as Any)
-        arrayList.add(t2 as Any)
-        arrayList
-    }).subscribe(object : Observer<List<Any>> {
+                val arrayList = ArrayList<Any>()
+                arrayList.add(t1 as Any)
+                arrayList.add(t2 as Any)
+                arrayList
+            }).subscribe(object : Observer<List<Any>> {
 
 
         override fun onSubscribe(d: Disposable) {
             if (iDialog != IDialog.UN_LOADING) {
-                progress.show("loading...")
+                progress.show(message)
             }
         }
 
@@ -69,7 +71,8 @@ public inline fun <T1, T2> BaseViewModel.convertZip(
             try {
                 success(data[0] as T1, data[1] as T2)
             } catch (e: Exception) {
-                e.printStackTrace()
+                //业务代码异常
+                onError(e)
             }
         }
 
@@ -82,6 +85,7 @@ public inline fun <T1, T2> BaseViewModel.convertZip(
                 e.printStackTrace()
                 KLog.e("onError函数调用奔溃")
             }
+            complete()
         }
 
         override fun onComplete() {
@@ -105,10 +109,12 @@ public inline fun <T1, T2, T3> BaseViewModel.convertZip(
         crossinline success: (T1, T2, T3) -> Unit,
         // 失败回调
         noinline error: (Throwable) -> Unit = {},
-        // 成功后，并执行完 success 方法后回调
+        // 无论成功失败，之后都会调用
         noinline complete: () -> Unit = {},
         // 网络失败，是否重试请求
-        retry: Boolean = true
+        retry: Boolean = true,
+        //loading显示内容
+        message: String = "loading"
 ) {
     Observable.zip(
             t1.convertRequest(bindUntilEvent(ViewModelEvent.CLEAR), retry),
@@ -124,7 +130,7 @@ public inline fun <T1, T2, T3> BaseViewModel.convertZip(
 
         override fun onSubscribe(d: Disposable) {
             if (iDialog != IDialog.UN_LOADING) {
-                progress.show("loading...")
+                progress.show(message)
             }
         }
 
@@ -133,7 +139,8 @@ public inline fun <T1, T2, T3> BaseViewModel.convertZip(
             try {
                 success(data[0] as T1, data[1] as T2, data[2] as T3)
             } catch (e: Exception) {
-                e.printStackTrace()
+                //业务代码异常
+                onError(e)
             }
         }
 
@@ -146,6 +153,7 @@ public inline fun <T1, T2, T3> BaseViewModel.convertZip(
                 e.printStackTrace()
                 KLog.e("onError函数调用奔溃")
             }
+            complete()
         }
 
         override fun onComplete() {

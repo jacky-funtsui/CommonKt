@@ -22,11 +22,8 @@ abstract class MVVMFragment<T : ViewDataBinding>(
         // click 列表
         vararg ids: Int = intArrayOf(0)
 ) : BaseFragment(layoutResID, *ids) {
-
     // mvvm
     protected lateinit var binding: T
-    // 是否初始化过
-    private var mInit = false
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -38,22 +35,59 @@ abstract class MVVMFragment<T : ViewDataBinding>(
         createViewModelProvider()
     }
 
+    /**
+     * 标志位
+     */
+    protected var isPrepared: Boolean = false //是否已经就绪，但未显示
+    protected var isLazyLoad: Boolean = false //是否已执行过懒加载
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        if (mInflate == null) {
-            // 注入
-            AndroidSupportInjection.inject(this)
-            // dataBinding
-            binding = DataBindingUtil.inflate(inflater, layoutResID, container, false)
-            binding.setLifecycleOwner(this)
-            // 记录布局，避免多次创建
-            mInflate = binding.root
-            // 初始化默认配置
-            initDefaultConfig(savedInstanceState)
-            // DataBinding
-            // 注册
-        }
+        // 注入
+        AndroidSupportInjection.inject(this)
+        // dataBinding
+        binding = DataBindingUtil.inflate(inflater, layoutResID, container, false)
+        binding.setLifecycleOwner(this)
+        // 记录布局，避免多次创建
+        mInflate = binding.root
+        // 初始化默认配置
+        initDefaultConfig(savedInstanceState)
+        // DataBinding
+        // 注册
         initClickEvent()
-        return binding.root
+
+        isPrepared = true
+        return mInflate
+    }
+
+
+    override fun initDefaultConfig(savedInstanceState: Bundle?) {
+        init(mInflate, savedInstanceState)
+        //初始化监听
+        setClickViewId(mInflate)
+    }
+
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        if (userVisibleHint) {
+            isLazyLoad = true
+            onLazyLoad()
+        }
+    }
+
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+        if (isVisibleToUser && isPrepared && !isLazyLoad) {
+            isLazyLoad = true
+            onLazyLoad()
+        }
+    }
+
+
+    /**
+     * 懒加载数据
+     */
+    open fun onLazyLoad() {
     }
 
     override fun onDestroyView() {
@@ -61,12 +95,10 @@ abstract class MVVMFragment<T : ViewDataBinding>(
         binding.unbind()
     }
 
+
     private fun initClickEvent() {
-        if (!mInit) {
-            mInit = true
-            //初始化监听
-            setClickViewId(mInflate)
-        }
+        //初始化监听
+        setClickViewId(mInflate)
     }
 
     protected open fun createViewModelProvider(): ViewModelProvider {
