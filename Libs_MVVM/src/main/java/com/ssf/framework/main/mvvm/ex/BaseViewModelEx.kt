@@ -2,26 +2,13 @@ package com.ssf.framework.main.mvvm.ex
 
 import com.ssf.framework.main.mvvm.lifecycle.ViewModelEvent
 import com.ssf.framework.main.mvvm.vm.BaseViewModel
-import com.ssf.framework.net.common.ProgressSubscriber
-import com.ssf.framework.net.common.ResponseListener
-import com.ssf.framework.net.common.ResponseSubscriber
-import com.ssf.framework.net.ex.convert
-import com.ssf.framework.net.ex.convertRequest
 import com.ssf.framework.net.interfac.IDialog
 import com.ssf.framework.net.transformer.ApplySchedulers
 import com.ssf.framework.net.transformer.ConvertSchedulers
-import com.ssf.framework.net.transformer.wrapperSchedulers
-import com.trello.rxlifecycle2.LifecycleTransformer
-import com.trello.rxlifecycle2.RxLifecycle.bindUntilEvent
-import com.trello.rxlifecycle2.android.ActivityEvent
-import com.trello.rxlifecycle2.components.support.RxAppCompatActivity
-import com.trello.rxlifecycle2.components.support.RxFragment
-import com.xm.xlog.KLog
 import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.disposables.Disposable
 import retrofit2.Response
-import java.util.ArrayList
 
 /**
  * @atuthor dm
@@ -42,10 +29,12 @@ public inline fun <T> BaseViewModel.apply(
         noinline success: (T) -> Unit,
         // 失败回调
         noinline error: (Throwable) -> Unit = {},
-        // 成功后，并执行完 success 方法后回调
+        // 无论成功失败，之后都会调用
         noinline complete: () -> Unit = {},
         // 是否重试
-        retry: Boolean = true
+        retry: Boolean = true,
+        //loading显示内容
+        message: String = "loading"
 ) {
     observable.compose(ApplySchedulers(retry))
             .compose(bindUntilEvent(ViewModelEvent.CLEAR))
@@ -53,7 +42,7 @@ public inline fun <T> BaseViewModel.apply(
 
                 override fun onSubscribe(d: Disposable) {
                     if (iDialog != IDialog.UN_LOADING) {
-                        progress.show("loading...")
+                        progress.show(message)
                     }
                 }
 
@@ -62,7 +51,8 @@ public inline fun <T> BaseViewModel.apply(
                     try {
                         success(t)
                     } catch (e: Exception) {
-                        e.printStackTrace()
+                        //业务代码异常
+                        onError(e)
                     }
                 }
 
@@ -72,8 +62,8 @@ public inline fun <T> BaseViewModel.apply(
                         error(e)
                     } catch (e: Exception) {
                         e.printStackTrace()
-                        KLog.e("onError函数调用奔溃")
                     }
+                    complete()
                 }
 
                 override fun onComplete() {
@@ -92,10 +82,12 @@ public inline fun <T> BaseViewModel.convert(
         noinline success: (T) -> Unit,
         // 失败回调
         noinline error: (Throwable) -> Unit = {},
-        // 成功后，并执行完 success 方法后回调
+        // 无论成功失败，之后都会调用
         noinline complete: () -> Unit = {},
         // 是否重试
-        retry: Boolean = true
+        retry: Boolean = true,
+        //loading显示内容
+        message: String = "loading"
 ) {
     observable.compose(ConvertSchedulers(retry))
             .compose(bindUntilEvent(ViewModelEvent.CLEAR))
@@ -103,7 +95,7 @@ public inline fun <T> BaseViewModel.convert(
 
                 override fun onSubscribe(d: Disposable) {
                     if (iDialog != IDialog.UN_LOADING) {
-                        progress.show("loading...")
+                        progress.show(message)
                     }
                 }
 
@@ -112,7 +104,8 @@ public inline fun <T> BaseViewModel.convert(
                     try {
                         success(t)
                     } catch (e: Exception) {
-                        e.printStackTrace()
+                        //业务代码异常
+                        onError(e)
                     }
                 }
 
@@ -122,8 +115,8 @@ public inline fun <T> BaseViewModel.convert(
                         error(e)
                     } catch (e: Exception) {
                         e.printStackTrace()
-                        KLog.e("onError函数调用奔溃")
                     }
+                    complete()
                 }
 
                 override fun onComplete() {
