@@ -1,7 +1,9 @@
 package com.ssf.framework.main.mvvm.livedata.event
 
+import android.annotation.SuppressLint
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.Observer
+import io.reactivex.android.schedulers.AndroidSchedulers
 
 
 /**
@@ -9,9 +11,18 @@ import android.arch.lifecycle.Observer
  * 适用于操作非layout上的UI
  * Created by hzz on 2018/8/19.
  */
-open class EventLiveData<T>: SubscribeLiveData<Event<T>>() {
+open class EventLiveData<T> : SubscribeLiveData<Event<T>>() {
 
-    fun postEvent(value:T){
+    @SuppressLint("CheckResult")
+    fun postEvent(value: T) {
+        io.reactivex.Observable.just(value)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    super.setValue(Event(it)) //以post方式不是直接响应，所以这里使用set
+                }
+    }
+
+    fun postEventSticky(value: T) {
         super.postValue(Event(value))
     }
 
@@ -29,16 +40,16 @@ open class EventLiveData<T>: SubscribeLiveData<Event<T>>() {
     /**
      * onActive状态下,检查消费，已消费不发送事件,意味着只要有一个Observer消费，其它observer就收不到消息
      */
-    fun observeEvent(owner: LifecycleOwner,observer: Observer<T>):Observer<Event<T>>{
+    fun observeEvent(owner: LifecycleOwner, observer: Observer<T>): Observer<Event<T>> {
         val observerWrapper = EventObserverWrapper(observer)
-        super.observe(owner,observerWrapper)
+        super.observe(owner, observerWrapper)
         return observerWrapper
     }
 
     /**
      * 所有状态下,检查消费，已消费不发送事件
      */
-    fun observeEventForever(observer: Observer<T>):Observer<Event<T>>{
+    fun observeEventForever(observer: Observer<T>): Observer<Event<T>> {
         val observerWrapper = EventObserverWrapper(observer)
         super.observeForever(observerWrapper)
         return observerWrapper
@@ -47,17 +58,17 @@ open class EventLiveData<T>: SubscribeLiveData<Event<T>>() {
     /**
      * onActive状态下,不检查消费始终发送事件
      */
-    protected open fun observeEventUnCheckHandled(owner: LifecycleOwner,observer: Observer<T>):Observer<Event<T>>{
-        val observerWrapper = EventObserverWrapper(observer,checkHandled = false)
-        super.observe(owner,observerWrapper)
+    protected open fun observeEventUnCheckHandled(owner: LifecycleOwner, observer: Observer<T>): Observer<Event<T>> {
+        val observerWrapper = EventObserverWrapper(observer, checkHandled = false)
+        super.observe(owner, observerWrapper)
         return observerWrapper
     }
 
     /**
      * 所有状态下,不检查消费始终发送事件
      */
-    protected open fun observeEventForeverUnCheckHandled(observer: Observer<T>):Observer<Event<T>>{
-        val observerWrapper = EventObserverWrapper(observer,checkHandled = false)
+    protected open fun observeEventForeverUnCheckHandled(observer: Observer<T>): Observer<Event<T>> {
+        val observerWrapper = EventObserverWrapper(observer, checkHandled = false)
         super.observeForever(observerWrapper)
         return observerWrapper
     }
@@ -65,14 +76,14 @@ open class EventLiveData<T>: SubscribeLiveData<Event<T>>() {
     class EventObserverWrapper<T>(
             private val observer: Observer<T>,
             private val checkHandled: Boolean = true
-    ) :Observer<Event<T>>{
+    ) : Observer<Event<T>> {
         override fun onChanged(t: Event<T>?) {
-            if(checkHandled) {
+            if (checkHandled) {
                 //检查消费
                 t?.getDataIfNotHandled()?.let {
                     observer.onChanged(it)
                 }
-            }else{
+            } else {
                 //始终发送事件
                 observer.onChanged(t?.data)
             }
