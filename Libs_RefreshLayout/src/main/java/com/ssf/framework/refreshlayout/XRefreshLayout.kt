@@ -1,12 +1,12 @@
 package com.ssf.framework.refreshlayout
 
 import android.content.Context
+import android.support.annotation.AttrRes
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.RecyclerView
 import android.util.AttributeSet
 import android.widget.Button
 import com.ssf.framework.net.ex.convert
-import com.ssf.framework.net.interfac.IDialog
 import com.ssf.framework.widget.state.IStateLayout
 import com.ssf.framework.widget.state.StateFrameLayout
 import com.trello.rxlifecycle2.LifecycleTransformer
@@ -25,15 +25,13 @@ import retrofit2.Response
  * @describe  上下拉刷新
  */
 
-class XRefreshLayout : android.support.v4.widget.SwipeRefreshLayout, SwipeRefreshLayout.OnRefreshListener {
-
+class XRefreshLayout @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null)
+    : SwipeRefreshLayout(context, attrs), SwipeRefreshLayout.OnRefreshListener {
 
     companion object {
         const val TAG = "XRefreshLayout"
     }
 
-    constructor(context: Context) : this(context, null)
-    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
 
     override fun onFinishInflate() {
         super.onFinishInflate()
@@ -44,7 +42,7 @@ class XRefreshLayout : android.support.v4.widget.SwipeRefreshLayout, SwipeRefres
     }
 
     // 状态布局
-    val mStateLayout: StateFrameLayout by lazy { StateFrameLayout(context) }
+    val mStateLayout: StateFrameLayout by lazy { StateFrameLayout(context, attrs) }
     // 内部包裹的  加载更多 RecyclerView
     val mLoadMoreRecyclerView: LoadMoreRecyclerView by lazy { LoadMoreRecyclerView(context, this) }
     // 当前加载的页
@@ -130,7 +128,7 @@ class XRefreshLayout : android.support.v4.widget.SwipeRefreshLayout, SwipeRefres
      */
     private fun <T> request(transformer: LifecycleTransformer<T>, request: (Int) -> Observable<Response<T>>, success: (T, Int) -> Unit, error: (Throwable) -> Unit = {}) {
         request(mPagerNo)
-                .convert(transformer,success = {
+                .convert(transformer, success = {
                     // 隐藏状态布局
                     if (mStateLayout.stateLayout == IStateLayout.LOADING) {
                         mStateLayout.stateLayout = IStateLayout.NORMAL
@@ -195,7 +193,7 @@ class XRefreshLayout : android.support.v4.widget.SwipeRefreshLayout, SwipeRefres
 
     fun <T> setRefreshListener(activity: RxAppCompatActivity, request: (Int) -> Observable<Response<T>>, success: (T, Int) -> Unit, error: (Throwable) -> Unit = {}) {
         val rx = activity.bindUntilEvent<T>(ActivityEvent.DESTROY)
-        setRefreshListener(rx,request, success, error)
+        setRefreshListener(rx, request, success, error)
     }
 
 
