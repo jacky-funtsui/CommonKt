@@ -1,7 +1,10 @@
 package com.ssf.framework.widget.state
 
+import android.graphics.Color
 import android.graphics.drawable.AnimationDrawable
+import android.support.v4.content.ContextCompat
 import android.support.v4.util.SimpleArrayMap
+import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.*
@@ -17,24 +20,43 @@ import com.ssf.framework.widget.R
  */
 public class StateLayoutUtil(
         /* 綁定的布局 */
-        private val mBindView: ViewGroup) {
-    /** 自定义layout */
-    private val mRootStateLayout by lazy {
-        val rootStateLayout = LayoutInflater.from(mBindView.context).inflate(R.layout.layout_state, mBindView, false)
-        rootStateLayout.visibility = View.GONE
-        rootStateLayout
-    }
+        private val mBindView: ViewGroup,
+        attrs: AttributeSet?) {
+
+    /** 状态view */
+    private val mLoadingView: View
+    private val mEmptyView: View
+    private val mRefreshView: View
+
     /** 加载中的布局 */
-    private val mLoadingViewAnimationDrawable: AnimationDrawable by lazy {
-        mRootStateLayout.findViewById<ImageView>(R.id.arr_loadView).drawable as AnimationDrawable;
-    }
+    private val mLoadingViewAnimationDrawable: AnimationDrawable
     /** 状态布局，当前呈现的状态 */
     private var mStateLayout = IStateLayout.LOADING
     /** 被隐藏的布局,存储用于后期恢复 */
     private val mCookieLayouts = SimpleArrayMap<View, Int>()
 
+
     init {
-        mBindView.addView(mRootStateLayout, 0)
+        /** 自定义layout */
+        val rootStateLayout: View = LayoutInflater.from(mBindView.context).inflate(R.layout.layout_state, mBindView, false)
+        mBindView.addView(rootStateLayout, 0)
+        mLoadingView = mBindView.findViewById<View>(R.id.arr_rl_loading)
+        mEmptyView = mBindView.findViewById<View>(R.id.arr_rl_empty)
+        mRefreshView = mBindView.findViewById<View>(R.id.arr_rl_refresh)
+        mLoadingViewAnimationDrawable = rootStateLayout.findViewById<ImageView>(R.id.arr_loadView).drawable as AnimationDrawable
+        attrs?.run {
+            val ta = mBindView.context.obtainStyledAttributes(attrs, R.styleable.StateFrameLayout)
+            val defaultColor = ContextCompat.getColor(mBindView.context, R.color.bg_state)
+            val bgColor = ta.getColor(R.styleable.StateFrameLayout_state_bg, Color.WHITE)
+            val bgErrorColor = ta.getColor(R.styleable.StateFrameLayout_state_error_bg, defaultColor)
+            val bgLoadingColor = ta.getColor(R.styleable.StateFrameLayout_state_loading_bg, defaultColor)
+            val bgEmptyColor = ta.getColor(R.styleable.StateFrameLayout_state_empty_bg, defaultColor)
+            ta.recycle()
+            rootStateLayout.setBackgroundColor(bgColor)
+            mLoadingView.setBackgroundColor(bgLoadingColor)
+            mEmptyView.setBackgroundColor(bgEmptyColor)
+            mRefreshView.setBackgroundColor(bgErrorColor)
+        }
     }
 
 
@@ -64,7 +86,7 @@ public class StateLayoutUtil(
      */
     private fun updateLayout() {
         when (mStateLayout) {
-        //加载中
+            //加载中
             IStateLayout.LOADING -> {
                 isShowMainLayout(false)
                 mBindView.findViewById<View>(R.id.arr_rl_loading).visibility = View.VISIBLE
@@ -72,7 +94,7 @@ public class StateLayoutUtil(
                 mBindView.findViewById<View>(R.id.arr_rl_refresh).visibility = View.GONE
                 mLoadingViewAnimationDrawable.start()
             }
-        //正常
+            //正常
             IStateLayout.NORMAL -> {
                 isShowMainLayout(true)
                 mBindView.findViewById<View>(R.id.arr_rl_loading).visibility = View.VISIBLE
@@ -80,7 +102,7 @@ public class StateLayoutUtil(
                 mBindView.findViewById<View>(R.id.arr_rl_refresh).visibility = View.GONE
                 mLoadingViewAnimationDrawable.stop()
             }
-        //为空
+            //为空
             IStateLayout.EMPTY -> {
                 isShowMainLayout(false)
                 mBindView.findViewById<View>(R.id.arr_rl_loading).visibility = View.GONE
@@ -88,7 +110,7 @@ public class StateLayoutUtil(
                 mBindView.findViewById<View>(R.id.arr_rl_refresh).visibility = View.GONE
                 mLoadingViewAnimationDrawable.stop()
             }
-        //重新刷新
+            //重新刷新
             IStateLayout.REFRESH -> {
                 isShowMainLayout(false)
                 mBindView.findViewById<View>(R.id.arr_rl_loading).visibility = View.GONE
@@ -96,7 +118,6 @@ public class StateLayoutUtil(
                 mBindView.findViewById<View>(R.id.arr_rl_refresh).visibility = View.VISIBLE
                 mLoadingViewAnimationDrawable.stop()
             }
-            else -> mLoadingViewAnimationDrawable.stop()
         }
     }
 

@@ -2,7 +2,9 @@ package com.ssf.commonkt.ui.main
 
 import android.app.Application
 import android.databinding.ObservableArrayList
-import com.ssf.commonkt.ui.simple.*
+import com.ssf.commonkt.ui.rv.RvDemoActivity
+import com.ssf.commonkt.ui.rv.simple.*
+import com.ssf.commonkt.ui.state.StateLayoutActivity
 import com.ssf.framework.main.mvvm.vm.BaseViewModel
 import javax.inject.Inject
 
@@ -13,11 +15,9 @@ import javax.inject.Inject
  */
 class MainViewModel @Inject constructor(application: Application) : BaseViewModel(application) {
     val list = ObservableArrayList<MainActivity.Bean>()
+
     init {
-        list.add(MainActivity.Bean("常规Adapter", SimpleListAdapterActivity::class.java))
-        list.add(MainActivity.Bean("兼容ClickIds Adapter", SimpleSupportAdapterActivity::class.java))
-        list.add(MainActivity.Bean("头部尾部Adapter", SimpleHeaderFooterActivity::class.java))
-        list.add(MainActivity.Bean("多布局MultiAdapter", SimpleMultiAdapterActivity::class.java))
-        list.add(MainActivity.Bean("多布局DelegateAdapter", SimpleDelegateAdapterActivity::class.java))
+        list.add(MainActivity.Bean("StateLayoutDemo", StateLayoutActivity::class.java))
+        list.add(MainActivity.Bean("RecycleViewDemo", RvDemoActivity::class.java))
     }
 }

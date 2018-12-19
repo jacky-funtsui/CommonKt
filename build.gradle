@@ -98,15 +98,15 @@ ext {
     // 友盟相关  消息推送 友盟统计
     framework_umeng_version = '1.0.0'
     // 窗口小组件封装  基于 autolayout、util、log
-    framework_widget_version = '1.0.3'
+    framework_widget_version = '1.0.4'
     // 网络请求 基于 widget
-    framework_net_version = '1.0.7'
+    framework_net_version = '1.0.9'
     // 上下拉刷新 因为 XRefreshLayout 基于 net
-    framework_refreshlayout_version = '1.0.7'
+    framework_refreshlayout_version = '1.0.8'
     /**
      * framework 主工程
      * 基于 上面所有 libs
      */
-    framework_main_version = '1.0.7'
-    framework_mvvm_version = '1.1.7'
+    framework_main_version = '1.0.8'
+    framework_mvvm_version = '1.2.0'
 }

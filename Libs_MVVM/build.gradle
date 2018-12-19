@@ -35,9 +35,7 @@ dependencies {
     implementation lib.SupportRecyclerviewV7
     implementation lib.SupportDesign
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    // framework
-    api  "com.ssf.framework:main:$config.framework_main_version"
-//    api project(':Libs_FrameWork')
+
     // lifecycle
     api "android.arch.lifecycle:extensions:$lifecycle"
     //dagger
@@ -47,6 +45,18 @@ dependencies {
     // dagger
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
     kapt "com.google.dagger:dagger-android-processor:$dagger_version"
+    implementation "com.ssf.framework:main:$config.framework_main_version"
+    implementation "com.ssf.framework:autolayout:$config.framework_autolayout_version"
+    implementation "com.ssf.framework:bsdiff:$config.framework_bsdiff_version"
+    implementation "com.ssf.framework:glide:$config.framework_glide_version"
+    implementation "com.ssf.framework:log:$config.framework_log_version"
+    implementation "com.ssf.framework:social:$config.framework_social_version"
+    implementation "com.ssf.framework:net:$config.framework_net_version"
+    implementation "com.ssf.framework:refreshlayout:$config.framework_refreshlayout_version"
+    implementation "com.ssf.framework:tinker:$config.framework_tinker_version"
+    implementation "com.ssf.framework:umeng:$config.framework_umeng_version"
+    implementation "com.ssf.framework:util:$config.framework_util_version"
+    implementation "com.ssf.framework:widget:$config.framework_widget_version"
 }
 
 

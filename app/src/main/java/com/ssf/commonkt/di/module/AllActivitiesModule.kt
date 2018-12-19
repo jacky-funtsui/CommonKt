@@ -6,6 +6,7 @@ import com.ssf.commonkt.di.ViewModelFactory
 import com.ssf.commonkt.di.module.main.MainViewModelModule
 import com.ssf.commonkt.di.scope.ActivityScope
 import com.ssf.commonkt.ui.main.MainActivity
+import com.ssf.commonkt.ui.rv.RvDemoActivity
 import com.ssf.commonkt.ui.welcome.WelcomeViewModelModule
 import dagger.Binds
 import dagger.Module

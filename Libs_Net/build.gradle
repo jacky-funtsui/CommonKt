@@ -13,8 +13,8 @@ android {
         minSdkVersion config.minSdkVersion
         targetSdkVersion config.targetSdkVersion
         versionCode 1
-        versionName config.framework_net_version
-//        versionName "1.0.7"
+//        versionName config.framework_net_version
+        versionName "1.0.9"
     }
 
     buildTypes {
@@ -71,8 +71,9 @@ dependencies {
     }
     // 消息
     api 'org.greenrobot:eventbus:3.1.1'
-    //widget
-    api "com.ssf.framework:widget:$config.framework_widget_version"
+    implementation "com.ssf.framework:widget:$config.framework_widget_version"
+    implementation "com.ssf.framework:log:$config.framework_log_version"
+    implementation "com.ssf.framework:util:$config.framework_util_version"
 }
 
 apply from: 'upload_bintray.gradle'

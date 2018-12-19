@@ -1,4 +1,4 @@
-package com.ssf.commonkt.ui.simple
+package com.ssf.commonkt.ui.rv.simple
 
 import android.content.Context
 import android.databinding.ViewDataBinding

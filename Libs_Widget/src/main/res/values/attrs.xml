@@ -2,22 +2,30 @@
 <resources>
     <!-- Banner -->
     <declare-styleable name="ConvenientBanner">
-        <attr name="canLoop" format="boolean"/>
+        <attr name="canLoop" format="boolean" />
     </declare-styleable>
 
     <!--倒计时button-->
     <declare-styleable name="CountDownTimerButton">
-        <attr name="countdown" format="integer"/>
-        <attr name="text" format="string"/>
-        <attr name="textColor" format="color"/>
-        <attr name="bg" format="reference|color"/>
+        <attr name="countdown" format="integer" />
+        <attr name="text" format="string" />
+        <attr name="textColor" format="color" />
+        <attr name="bg" format="reference|color" />
     </declare-styleable>
 
     <!-- 密码框 -->
     <declare-styleable name="PayPwdView">
-        <attr name="count" format="integer"/>
-        <attr name="pay_border_color" format="color"/>
-        <attr name="dot_color" format="color"/>
+        <attr name="count" format="integer" />
+        <attr name="pay_border_color" format="color" />
+        <attr name="dot_color" format="color" />
+    </declare-styleable>
+
+    <!--状态布局背景颜色-->
+    <declare-styleable name="StateFrameLayout">
+        <attr name="state_bg" format="color" />
+        <attr name="state_empty_bg" format="color" />
+        <attr name="state_error_bg" format="color" />
+        <attr name="state_loading_bg" format="color" />
     </declare-styleable>
 
 </resources>

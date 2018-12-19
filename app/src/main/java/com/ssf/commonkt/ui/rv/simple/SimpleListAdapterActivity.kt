@@ -1,4 +1,4 @@
-package com.ssf.commonkt.ui.simple
+package com.ssf.commonkt.ui.rv.simple
 
 import android.content.Context
 import android.databinding.ViewDataBinding
@@ -10,7 +10,6 @@ import com.ssf.framework.main.activity.BaseActivity
 import com.ssf.framework.main.ex.bindView
 import com.ssf.framework.main.mvvm.adapter.BaseBindingAdapter
 import com.ssf.framework.main.mvvm.adapter.BaseBindingViewHolder
-import com.ssf.framework.main.mvvm.adapter.BaseMultiBindingAdapter
 import com.ssf.framework.widget.ex.toast
 
 /**

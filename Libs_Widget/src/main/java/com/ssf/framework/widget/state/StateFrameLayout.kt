@@ -12,9 +12,9 @@ import com.ssf.framework.autolayout.AutoFrameLayout
  * @describe 状态布局
  */
 open class StateFrameLayout @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, @AttrRes defStyleAttr: Int = 0) : AutoFrameLayout(context, attrs, defStyleAttr) {
-    private val mLayoutUtil by lazy {
-        StateLayoutUtil(this)
-    }
+
+
+    private val mLayoutUtil: StateLayoutUtil = StateLayoutUtil(this, attrs)
 
     /**
      * 刷新状态布局

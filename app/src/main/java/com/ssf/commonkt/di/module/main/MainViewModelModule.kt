@@ -3,6 +3,7 @@ package com.ssf.commonkt.di.module.main
 import android.arch.lifecycle.ViewModel
 import com.ssf.commonkt.di.ViewModelKey
 import com.ssf.commonkt.ui.main.MainViewModel
+import com.ssf.commonkt.ui.rv.RvDemoViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap

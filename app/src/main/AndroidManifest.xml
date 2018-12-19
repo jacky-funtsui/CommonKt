@@ -4,13 +4,13 @@
     package="com.ssf.commonkt">
 
     <application
+        android:name=".App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:name=".App"
         tools:ignore="GoogleAppIndexingWarning">
 
         <!-- 声明UI设计稿的尺寸 -->
@@ -28,12 +28,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.main.MainActivity"/>
-        <activity android:name=".ui.simple.SimpleListAdapterActivity"/>
-        <activity android:name=".ui.simple.SimpleSupportAdapterActivity"/>
-        <activity android:name=".ui.simple.SimpleHeaderFooterActivity"/>
-        <activity android:name=".ui.simple.SimpleMultiAdapterActivity"/>
-        <activity android:name=".ui.simple.SimpleDelegateAdapterActivity"/>
+        <activity android:name=".ui.main.MainActivity" />
+        <activity android:name=".ui.rv.RvDemoActivity" />
+        <activity android:name=".ui.rv.simple.SimpleListAdapterActivity" />
+        <activity android:name=".ui.rv.simple.SimpleSupportAdapterActivity" />
+        <activity android:name=".ui.rv.simple.SimpleHeaderFooterActivity" />
+        <activity android:name=".ui.rv.simple.SimpleMultiAdapterActivity" />
+        <activity android:name=".ui.rv.simple.SimpleDelegateAdapterActivity" />
+        <activity android:name=".ui.state.StateLayoutActivity"></activity>
     </application>
 
 </manifest>

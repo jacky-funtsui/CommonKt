@@ -7,5 +7,8 @@
     <!-- tabhost -->
     <item name="containerId" type="id"/>
     <item name="tab_item_image" type="id"/>
-    <item name="tab_item_title" type="id"/>
+    <item name="arr_rl_loading" type="id"/>
+    <item name="arr_rl_empty" type="id"/>
+    <item name="arr_rl_refresh" type="id"/>
+
 </resources>
