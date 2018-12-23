@@ -22,11 +22,11 @@ public inline fun <T> Observable<T>.apply(
         // 生命周期控制
         transformer: LifecycleTransformer<T>,
         // 成功回调
-        crossinline success: (T) -> Unit,
+        noinline success: (T) -> Unit,
         // 失败回调
-        crossinline error: (Throwable) -> Unit = {},
+        noinline error: (Throwable) -> Unit = {},
         // 成功后，并执行完 success 方法后回调
-        crossinline complete: () -> Unit = {},
+        noinline complete: () -> Unit = {},
         retry: Boolean = true
 ) {
     this.compose(ApplySchedulers(retry))
@@ -63,11 +63,11 @@ public inline fun <T> Observable<Response<T>>.convert(
         // 生命周期控制
         transformer: LifecycleTransformer<T>,
         // 成功回调
-        crossinline success: (T) -> Unit,
+        noinline success: (T) -> Unit,
         // 失败回调
-        crossinline error: (Throwable) -> Unit = {},
+        noinline error: (Throwable) -> Unit = {},
         // 成功后，并执行完 success 方法后回调
-        crossinline complete: () -> Unit = {},
+        noinline complete: () -> Unit = {},
         // 网络失败，是否重试请求
         retry: Boolean = true
 ) {
@@ -110,9 +110,9 @@ public inline fun <T1, T2> RxFragment.convertZip(
         // 成功回调
         crossinline success: (T1, T2) -> Unit,
         // 失败回调
-        crossinline error: (Throwable) -> Unit = {},
+        noinline error: (Throwable) -> Unit = {},
         // 成功后，并执行完 success 方法后回调
-        crossinline complete: () -> Unit = {},
+        noinline complete: () -> Unit = {},
         retry: Boolean = true
 ) {
     Observable.zip(t1.convertRequest(this, retry), t2.convertRequest(this, retry), BiFunction<T1, T2, ArrayList<Any>> { t1, t2 ->

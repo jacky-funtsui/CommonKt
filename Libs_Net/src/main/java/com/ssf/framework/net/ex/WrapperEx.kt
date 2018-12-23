@@ -37,11 +37,11 @@ public inline fun <T> Observable<T>.apply(
         // dialog呈现方式，三种：UN_LOADING(不显示),NORMAL_LOADING(显示可关闭),NORMAL_LOADING(显示可关闭),FORBID_LOADING(显示不关闭)
         iDialog: IDialog = IDialog.FORBID_LOADING,
         // 成功回调
-        crossinline success: (T) -> Unit,
+        noinline success: (T) -> Unit,
         // 失败回调
-        crossinline error: (Throwable) -> Unit = {},
+        noinline error: (Throwable) -> Unit = {},
         // 成功后，并执行完 success 方法后回调
-        crossinline complete: () -> Unit = {},
+        noinline complete: () -> Unit = {},
         // 网络失败，是否重试请求
         retry: Boolean = true
 ) {
@@ -82,11 +82,11 @@ public inline fun <T> Observable<Response<T>>.convert(
         // dialog呈现方式，三种：UN_LOADING(不显示),NORMAL_LOADING(显示可关闭),NORMAL_LOADING(显示可关闭),FORBID_LOADING(显示不关闭)
         iDialog: IDialog = IDialog.FORBID_LOADING,
         // 成功回调
-        crossinline success: (T) -> Unit,
+        noinline success: (T) -> Unit,
         // 失败回调
-        crossinline error: (Throwable) -> Unit = {},
+        noinline error: (Throwable) -> Unit = {},
         // 成功后，并执行完 success 方法后回调
-        crossinline complete: () -> Unit = {},
+        noinline complete: () -> Unit = {},
         // 网络失败，是否重试请求
         retry: Boolean = true
 ) {
@@ -130,11 +130,11 @@ public inline fun <T> Observable<T>.apply(
         // dialog呈现方式，三种：UN_LOADING(不显示),NORMAL_LOADING(显示可关闭),NORMAL_LOADING(显示可关闭),FORBID_LOADING(显示不关闭)
         iDialog: IDialog = IDialog.FORBID_LOADING,
         // 成功回调
-        crossinline success: (T) -> Unit,
+        noinline success: (T) -> Unit,
         // 失败回调
-        crossinline error: (Throwable) -> Unit = {},
+        noinline error: (Throwable) -> Unit = {},
         // 成功后，并执行完 success 方法后回调
-        crossinline complete: () -> Unit = {},
+        noinline complete: () -> Unit = {},
         // 网络失败，是否重试请求
         retry: Boolean = true
 ) {
@@ -173,11 +173,11 @@ public inline fun <T> Observable<Response<T>>.convert(
         // dialog呈现方式，三种：UN_LOADING(不显示),NORMAL_LOADING(显示可关闭),NORMAL_LOADING(显示可关闭),FORBID_LOADING(显示不关闭)
         iDialog: IDialog = IDialog.FORBID_LOADING,
         // 成功回调
-        crossinline success: (T) -> Unit,
+        noinline success: (T) -> Unit,
         // 失败回调
-        crossinline error: (Throwable) -> Unit = {},
+        noinline error: (Throwable) -> Unit = {},
         // 成功后，并执行完 success 方法后回调
-        crossinline complete: () -> Unit = {},
+        noinline complete: () -> Unit = {},
         // 网络失败，是否重试请求
         retry: Boolean = true
 ) {
@@ -219,11 +219,11 @@ public inline fun <T> Observable<T>.apply(
         // dialog呈现方式，三种：UN_LOADING(不显示),NORMAL_LOADING(显示可关闭),NORMAL_LOADING(显示可关闭),FORBID_LOADING(显示不关闭)
         iDialog: IDialog = IDialog.FORBID_LOADING,
         // 成功回调
-        crossinline success: (T) -> Unit,
+        noinline success: (T) -> Unit,
         // 失败回调
-        crossinline error: (Throwable) -> Unit = {},
+        noinline error: (Throwable) -> Unit = {},
         // 成功后，并执行完 success 方法后回调
-        crossinline complete: () -> Unit = {},
+        noinline complete: () -> Unit = {},
         // 网络失败，是否重试请求
         retry: Boolean = true
 ) {
@@ -265,11 +265,11 @@ public inline fun <T> Observable<Response<T>>.convert(
         // dialog呈现方式，三种：UN_LOADING(不显示),NORMAL_LOADING(显示可关闭),NORMAL_LOADING(显示可关闭),FORBID_LOADING(显示不关闭)
         iDialog: IDialog = IDialog.FORBID_LOADING,
         // 成功回调
-        crossinline success: (T) -> Unit,
+        noinline success: (T) -> Unit,
         // 失败回调
-        crossinline error: (Throwable) -> Unit = {},
+        noinline error: (Throwable) -> Unit = {},
         // 成功后，并执行完 success 方法后回调
-        crossinline complete: () -> Unit = {},
+        noinline complete: () -> Unit = {},
         // 网络失败，是否重试请求
         retry: Boolean = true
 ) {
@@ -376,9 +376,9 @@ public inline fun <T1, T2> RxFragment.convertZip(
         // 成功回调
         crossinline success: (T1, T2) -> Unit,
         // 失败回调
-        crossinline error: (Throwable) -> Unit = {},
+        noinline error: (Throwable) -> Unit = {},
         // 成功后，并执行完 success 方法后回调
-        crossinline complete: () -> Unit = {},
+        noinline complete: () -> Unit = {},
         retry: Boolean = true
 ) {
 
@@ -424,9 +424,9 @@ public inline fun <T1, T2> RxAppCompatActivity.convertZip(
         // 成功回调
         crossinline success: (T1, T2) -> Unit,
         // 失败回调
-        crossinline error: (Throwable) -> Unit = {},
+        noinline error: (Throwable) -> Unit = {},
         // 成功后，并执行完 success 方法后回调
-        crossinline complete: () -> Unit = {},
+        noinline complete: () -> Unit = {},
         retry: Boolean = true
 ) {
 

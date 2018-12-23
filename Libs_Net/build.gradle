@@ -13,8 +13,8 @@ android {
         minSdkVersion config.minSdkVersion
         targetSdkVersion config.targetSdkVersion
         versionCode 1
-//        versionName config.framework_net_version
-        versionName "1.0.9"
+        versionName config.framework_net_version
+//        versionName "1.1.0"
     }
 
     buildTypes {
