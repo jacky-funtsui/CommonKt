@@ -38,8 +38,13 @@ abstract class MVVMFragment<T : ViewDataBinding>(
     /**
      * 标志位
      */
-    protected var isPrepared: Boolean = false //是否已经就绪，但未显示
-    protected var isLazyLoad: Boolean = false //是否已执行过懒加载
+    var isPrepared: Boolean = false //是否已经就绪，但未显示
+        private set
+    var isLazyLoad: Boolean = false //是否已执行过懒加载
+        private set
+    var isActive: Boolean = false //是否可交互状态
+        private set
+    private var backUserVisible: Boolean = false //备份之前的显示状态
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // 注入
@@ -47,7 +52,7 @@ abstract class MVVMFragment<T : ViewDataBinding>(
         // dataBinding
         binding = DataBindingUtil.inflate(inflater, layoutResID, container, false)
         binding.setLifecycleOwner(this)
-        // 记录布局，避免多次创建
+        // 记录布局
         mInflate = binding.root
         // 初始化默认配置
         initDefaultConfig(savedInstanceState)
@@ -70,19 +75,75 @@ abstract class MVVMFragment<T : ViewDataBinding>(
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         if (userVisibleHint) {
-            isLazyLoad = true
-            onLazyLoad()
+            invokeUserVisible(true)
+            if (canLazyLoad()) {
+                isLazyLoad = true
+                onLazyLoad()
+            }
         }
     }
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
-        if (isVisibleToUser && isPrepared && !isLazyLoad) {
-            isLazyLoad = true
-            onLazyLoad()
+        if (isVisibleToUser && isPrepared) {
+            invokeUserVisible(true)
+            if (canLazyLoad()) {
+                isLazyLoad = true
+                onLazyLoad()
+            }
+        }
+        if (!isVisibleToUser && isActive) {
+            invokeUserVisible(false)
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (isActive && userVisibleHint && !backUserVisible) {
+            invokeUserVisible(true)
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if (userVisibleHint && backUserVisible) {
+            invokeUserVisible(false)
+        }
+    }
+
+    private fun invokeUserVisible(visible: Boolean) {
+        if (!isPrepared) return
+        if (visible) {
+            onUserVisible()
+            isActive = true
+        } else {
+            if (isActive && backUserVisible) {
+                onUserInVisible()
+            }
+        }
+        backUserVisible = visible //备份状态，用来在Resume和Stop时也能响应invokeVisible
+    }
+
+    /**
+     * 用户可见
+     */
+    open protected fun onUserVisible() {
+
+    }
+
+    /**
+     * 用户不可见
+     */
+    open protected fun onUserInVisible() {
+
+    }
+
+    /**
+     * 是否允许回调懒加载方法，默认只加载一次,后续可从vm中恢复数据
+     */
+    open protected fun canLazyLoad(): Boolean {
+        return !isLazyLoad
+    }
 
     /**
      * 懒加载数据
@@ -93,6 +154,9 @@ abstract class MVVMFragment<T : ViewDataBinding>(
     override fun onDestroyView() {
         super.onDestroyView()
         binding.unbind()
+        isActive = false
+        backUserVisible = false
+        isPrepared = false
     }
 
 

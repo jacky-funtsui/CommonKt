@@ -35,7 +35,8 @@
         <activity android:name=".ui.rv.simple.SimpleHeaderFooterActivity" />
         <activity android:name=".ui.rv.simple.SimpleMultiAdapterActivity" />
         <activity android:name=".ui.rv.simple.SimpleDelegateAdapterActivity" />
-        <activity android:name=".ui.state.StateLayoutActivity"></activity>
+        <activity android:name=".ui.state.StateLayoutActivity" />
+        <activity android:name=".ui.lazy.LazyFragmentActivity" />
     </application>
 
 </manifest>
