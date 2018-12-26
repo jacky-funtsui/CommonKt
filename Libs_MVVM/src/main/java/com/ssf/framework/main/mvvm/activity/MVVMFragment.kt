@@ -104,8 +104,8 @@ abstract class MVVMFragment<T : ViewDataBinding>(
         }
     }
 
-    override fun onStop() {
-        super.onStop()
+    override fun onPause() {
+        super.onPause()
         if (userVisibleHint && backUserVisible) {
             invokeUserVisible(false)
         }
