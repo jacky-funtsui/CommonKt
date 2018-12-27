@@ -4,10 +4,7 @@ import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
 import com.ssf.framework.main.mvvm.lifecycle.RxLifecycleViewModel
 import com.ssf.framework.main.mvvm.lifecycle.ViewModelEvent
-import com.ssf.framework.main.mvvm.livedata.ActivityLiveData
-import com.ssf.framework.main.mvvm.livedata.ErrorLiveData
-import com.ssf.framework.main.mvvm.livedata.ProgressLiveData
-import com.ssf.framework.main.mvvm.livedata.ToastLiveData
+import com.ssf.framework.main.mvvm.livedata.*
 import com.trello.rxlifecycle2.LifecycleProvider
 import com.trello.rxlifecycle2.LifecycleTransformer
 import com.trello.rxlifecycle2.RxLifecycle
@@ -24,6 +21,7 @@ open class BaseViewModel constructor(application: Application) : AndroidViewMode
     val error = ErrorLiveData()
     val toast = ToastLiveData()
     val activity = ActivityLiveData()
+    val handler = HandlerLiveData()
 
     override fun onCleared() {
         super.onCleared()

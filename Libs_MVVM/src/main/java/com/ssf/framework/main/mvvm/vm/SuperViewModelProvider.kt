@@ -42,9 +42,18 @@ class SuperViewModelProvider(private val lifecycleOwner: LifecycleOwner, factory
     }
 
     //置为全局是为了同个ViewModelStore作用于相同的对象
-    private val defaultProgressObserver by lazy { DefaultProgressObserver(activity) }
-    private val defaultToastObserver by lazy { DefaultToastObserver(activity) }
-    private val defaultErrorObserver by lazy { DefaultErrorObserver(activity) }
+    private val defaultProgressObserver by lazy {
+        VMSetup.getInstance().defaultObserverProvider?.providerProgressObserver(activity)
+                ?: DefaultProgressObserver(activity)
+    }
+    private val defaultToastObserver by lazy {
+        VMSetup.getInstance().defaultObserverProvider?.providerToastObserver(activity)
+                ?: DefaultToastObserver(activity)
+    }
+    private val defaultErrorObserver by lazy {
+        VMSetup.getInstance().defaultObserverProvider?.providerErrorObserver(activity)
+                ?: DefaultErrorObserver(activity)
+    }
     private val defaultActivityObserver by lazy { DefaultActivityObserver(activity) }
 
 
