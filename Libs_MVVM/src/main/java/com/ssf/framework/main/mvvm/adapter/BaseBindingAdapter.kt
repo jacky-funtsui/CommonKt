@@ -82,10 +82,28 @@ abstract class BaseBindingAdapter<T, B : ViewDataBinding>(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             VIEW_TYPE_HEADER -> {
-                createBaseViewHolder(parent, viewType, mHeaderLayout!!)
+                val headerLayout = mHeaderLayout
+                if (headerLayout != null) {
+                    val headerParent = headerLayout.parent
+                    if (headerParent is ViewGroup) {
+                        headerParent.removeView(headerLayout)
+                    }
+                    createBaseViewHolder(parent, viewType, headerLayout)
+                } else {
+                    throw RuntimeException("headerLayout is null")
+                }
             }
             VIEW_TYPE_FOOTER -> {
-                createBaseViewHolder(parent, viewType, mFooterLayout!!)
+                val footLayout = mFooterLayout
+                if (footLayout != null) {
+                    val footParent = footLayout.parent
+                    if (footParent is ViewGroup) {
+                        footParent.removeView(footLayout)
+                    }
+                    createBaseViewHolder(parent, viewType, footLayout)
+                } else {
+                    throw RuntimeException("footLayout is null")
+                }
             }
             else -> {
                 createBindingViewHolder(parent, viewType)
@@ -294,20 +312,22 @@ abstract class BaseBindingAdapter<T, B : ViewDataBinding>(
      * @param index
      */
     fun addHeader(view: View, index: Int = -1): Int {
-        if (mHeaderLayout == null) {
-            mHeaderLayout = LinearLayout(view.context)
-            mHeaderLayout?.orientation = LinearLayout.VERTICAL
-            mHeaderLayout?.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        var headLayout = mHeaderLayout
+        if (headLayout == null) {
+            headLayout = LinearLayout(view.context)
+            headLayout.orientation = LinearLayout.VERTICAL
+            headLayout.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            mHeaderLayout = headLayout
         }
 
         var insertIndex = 0
-        val childCount = mHeaderLayout!!.childCount
+        val childCount = headLayout.childCount
         if (index < 0 || index > childCount) {
             insertIndex = childCount
         }
 
-        mHeaderLayout!!.addView(view, insertIndex)
-        if (mHeaderLayout!!.childCount == 1) {
+        headLayout.addView(view, insertIndex)
+        if (headLayout.childCount == 1) {
             val position = getHeaderViewPosition()
             if (position != -1) {
                 notifyItemInserted(position)
@@ -320,20 +340,22 @@ abstract class BaseBindingAdapter<T, B : ViewDataBinding>(
      * 添加尾部
      */
     fun addFooter(view: View, index: Int = -1): Int {
-        if (mFooterLayout == null) {
-            mFooterLayout = LinearLayout(view.context)
-            mFooterLayout?.orientation = LinearLayout.VERTICAL
-            mFooterLayout?.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        var footLayout = mFooterLayout
+        if (footLayout == null) {
+            footLayout = LinearLayout(view.context)
+            footLayout.orientation = LinearLayout.VERTICAL
+            footLayout.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            mFooterLayout = footLayout
         }
 
         var insertIndex = 0
-        val childCount = mFooterLayout!!.childCount
+        val childCount = footLayout.childCount
         if (index < 0 || index > childCount) {
             insertIndex = childCount
         }
 
-        mFooterLayout!!.addView(view, insertIndex)
-        if (mFooterLayout!!.childCount == 1) {
+        footLayout.addView(view, insertIndex)
+        if (footLayout.childCount == 1) {
             val position = getFooterViewPosition()
             if (position != -1) {
                 notifyItemInserted(position)
@@ -343,24 +365,26 @@ abstract class BaseBindingAdapter<T, B : ViewDataBinding>(
     }
 
     fun removeHeader(view: View) {
-        mHeaderLayout?.let {
-            it.removeView(view)
-            if (it.childCount == 0) {
+        mHeaderLayout?.let { headerLayout ->
+            headerLayout.removeView(view)
+            if (headerLayout.childCount == 0) {
                 val position = getHeaderViewPosition()
                 if (position != -1) {
                     notifyItemRemoved(position)
+                    mHeaderLayout = null
                 }
             }
         }
     }
 
     fun removeFooter(view: View) {
-        mFooterLayout?.let {
-            it.removeView(view)
-            if (it.childCount == 0) {
+        mFooterLayout?.let { footLayout ->
+            footLayout.removeView(view)
+            if (footLayout.childCount == 0) {
                 val position = getFooterViewPosition()
                 if (position != -1) {
                     notifyItemRemoved(position)
+                    mFooterLayout = null
                 }
             }
         }
