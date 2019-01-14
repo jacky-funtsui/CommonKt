@@ -72,8 +72,8 @@ public class ImageBinding {
         }
 
         Glide.with(image.getContext())
-                .setDefaultRequestOptions(requestOptions)
                 .load(source)
+                .apply(requestOptions)
                 .into(image);
     }
 

@@ -13,7 +13,7 @@ android {
         targetSdkVersion config.targetSdkVersion
         versionCode 1
 //        versionName config.framework_mvvm_version
-        versionName "1.2.7"
+        versionName "1.2.9"
     }
 
 
