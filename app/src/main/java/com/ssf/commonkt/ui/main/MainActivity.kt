@@ -37,6 +37,8 @@ class MainActivity : MVVMActivity<ActivityMainBinding>(R.layout.activity_main),
         // 多布局
         rv.layoutManager = LinearLayoutManager(this)
         rv.adapter = mAdapter
+        // 测试
+        val v= findViewById<View>(R.id.swipe)
     }
 
     class SimpleListAdapter(context: Context, itemClickListener: OnItemClickListener<Bean>) :

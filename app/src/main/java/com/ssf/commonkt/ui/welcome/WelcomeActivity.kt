@@ -1,13 +1,10 @@
 package com.ssf.commonkt.ui.welcome
 
-import android.support.v7.app.AppCompatActivity
-import android.os.Bundle
 import android.view.KeyEvent
 import com.alibaba.android.arouter.facade.annotation.Route
 
 import com.ssf.commonkt.R
 import com.ssf.commonkt.data.config.IRouterConfig
-import com.ssf.commonkt.databinding.ActivityMainBinding
 import com.ssf.commonkt.databinding.ActivityWelcomeBinding
 import com.ssf.framework.main.mvvm.activity.MVVMActivity
 
