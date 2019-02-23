@@ -72,7 +72,7 @@ abstract class BaseActivity(
                 this.emitter = emitter
                 ids.forEach { id ->
                     if (id != 0) {
-                        findViewById<View>(id).setOnClickListener(this)
+                        findViewById<View>(id)?.setOnClickListener(this)
                     }
                 }
             }

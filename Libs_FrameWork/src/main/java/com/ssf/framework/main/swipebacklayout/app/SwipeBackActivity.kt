@@ -23,7 +23,7 @@ open class SwipeBackActivity : RxAppCompatActivity(), SwipeBackActivityBase {
         mHelper.onPostCreate()
     }
 
-    override fun <T : View> findViewById(id: Int): T {
+    override fun <T : View> findViewById(id: Int): T? {
         val v = super.findViewById<T>(id)
         return v ?: mHelper.findViewById(id)
     }

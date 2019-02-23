@@ -134,31 +134,11 @@ dependencies {
     // dagger
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
     kapt "com.google.dagger:dagger-android-processor:$dagger_version"
-
-//    implementation project(':Libs_MVVM')
+    // mvvm
     implementation  "com.ssf.framework:mvvm:$config.framework_mvvm_version"
-//    implementation project(':Libs_AutoLayout')
-    implementation "com.ssf.framework:autolayout:$config.framework_autolayout_version"
-//    implementation project(':Libs_BsDiff')
-    implementation "com.ssf.framework:bsdiff:$config.framework_bsdiff_version"
+//    implementation project(':Libs_MVVM')
 //    implementation project(':Libs_FrameWork')
-    implementation  "com.ssf.framework:main:$config.framework_main_version"
-//    implementation project(':Libs_Glide')
-    implementation  "com.ssf.framework:glide:$config.framework_glide_version"
-//    implementation project(':Libs_Log')
-    implementation "com.ssf.framework:log:$config.framework_log_version"
-//    implementation project(':Libs_Social')
-    implementation  "com.ssf.framework:social:$config.framework_social_version"
-//    implementation project(':Libs_Net')
-    implementation  "com.ssf.framework:net:$config.framework_net_version"
+//    implementation  "com.ssf.framework:net:$config.framework_net_version"
 //    implementation project(':Libs_RefreshLayout')
-    implementation  "com.ssf.framework:refreshlayout:$config.framework_refreshlayout_version"
-//    implementation project(':Libs_Tinker')
-    implementation "com.ssf.framework:tinker:$config.framework_tinker_version"
-//    implementation project(':Libs_Umeng')
-    implementation  "com.ssf.framework:umeng:$config.framework_umeng_version"
-//    implementation project(':Libs_Util')
-    implementation "com.ssf.framework:util:$config.framework_util_version"
-//    implementation project(':Libs_Widget')
-    implementation "com.ssf.framework:widget:$config.framework_widget_version"
+//    implementation  "com.ssf.framework:refreshlayout:$config.framework_refreshlayout_version"
 }

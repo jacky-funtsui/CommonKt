@@ -42,6 +42,7 @@ allprojects {
         jcenter()
         maven { url "https://jitpack.io" }
         maven { url "https://dl.bintray.com/ssfandroid/Android/" }
+        maven { url "https://tg.bintray.com/android/" }
     }
 
     tasks.withType(Javadoc) {
@@ -102,11 +103,11 @@ ext {
     // 网络请求 基于 widget
     framework_net_version = '1.1.0'
     // 上下拉刷新 因为 XRefreshLayout 基于 net
-    framework_refreshlayout_version = '1.0.8'
+    framework_refreshlayout_version = '1.0.9'
     /**
      * framework 主工程
      * 基于 上面所有 libs
      */
-    framework_main_version = '1.0.8'
-    framework_mvvm_version = '1.2.9'
+    framework_main_version = '2.0.0'
+    framework_mvvm_version = '2.0.0'
 }
