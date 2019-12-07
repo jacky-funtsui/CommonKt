@@ -1,6 +1,9 @@
 package com.ssf.framework.main.activity
 
+import android.app.Activity
 import android.content.Context
+import android.content.pm.ActivityInfo
+import android.os.Build
 import android.os.Bundle
 import android.util.AttributeSet
 import android.view.View
@@ -8,16 +11,19 @@ import com.ssf.framework.autolayout.AutoConstraintLayout
 import com.ssf.framework.autolayout.AutoFrameLayout
 import com.ssf.framework.autolayout.AutoLinearLayout
 import com.ssf.framework.autolayout.AutoRelativeLayout
-import com.ssf.framework.main.R
 import com.ssf.framework.main.ex.IConfig
 import com.ssf.framework.main.swipebacklayout.app.SwipeBackActivity
 import com.ssf.framework.main.util.StatusBarUtil
 import com.trello.rxlifecycle2.android.ActivityEvent
 import com.umeng.analytics.MobclickAgent
+import com.xm.xlog.KLog
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
 import io.reactivex.ObservableOnSubscribe
 import java.util.concurrent.TimeUnit
+import android.content.res.TypedArray
+import android.annotation.SuppressLint
+
 
 /**
  * BaseActivity基础类
@@ -36,6 +42,10 @@ abstract class BaseActivity(
 ) : SwipeBackActivity(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.O && isTranslucentOrFloating()) {
+            val result = fixOrientation();
+            KLog.d("BaseActivity", "onCreate fixOrientation when Oreo, result = $result");
+        }
         super.onCreate(savedInstanceState)
         setContentView()
         // 初始化默认配置
@@ -78,7 +88,13 @@ abstract class BaseActivity(
             }
         }).compose(bindUntilEvent(ActivityEvent.DESTROY))
                 .throttleFirst(500, TimeUnit.MILLISECONDS)
-                .subscribe { onClick(it) }
+                .subscribe {
+                    try {
+                        onClick(it)
+                    } catch (e: Exception) {
+                        KLog.e("BaseActivity", "点击事件有异常，异常信息为: ${e.message}")
+                    }
+                }
     }
 
     /** 设置状态栏  https://github.com/laobie/StatusBarUtil */
@@ -86,7 +102,7 @@ abstract class BaseActivity(
         if (statusBarColor != 0) {
             StatusBarUtil.setColor(this, statusBarColor)
         } else {
-            StatusBarUtil.setTranslucentForImageView(this, 0, findViewById(R.id.toolbar))
+            StatusBarUtil.setTranslucentForImageView(this, 0, findViewById(com.ssf.framework.main.R.id.toolbar))
         }
     }
 
@@ -121,4 +137,42 @@ abstract class BaseActivity(
         val disposable = Observable.just(v)
     }
 
+
+    override fun setRequestedOrientation(requestedOrientation: Int) {
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.O && isTranslucentOrFloating()) {
+            KLog.i("BaseActivity", "avoid calling setRequestedOrientation when Oreo.");
+            return
+        }
+        super.setRequestedOrientation(requestedOrientation)
+    }
+
+    @SuppressLint("PrivateApi")
+    private fun isTranslucentOrFloating(): Boolean {
+        var isTranslucentOrFloating = false
+        try {
+            val styleableRes = Class.forName("com.android.internal.R\$styleable").getField("Window").get(null) as IntArray
+            val ta = obtainStyledAttributes(styleableRes)
+            val m = ActivityInfo::class.java.getMethod("isTranslucentOrFloating", TypedArray::class.java)
+            m.isAccessible = true
+            isTranslucentOrFloating = m.invoke(null, ta) as Boolean
+            m.isAccessible = false
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return isTranslucentOrFloating
+    }
+
+    private fun fixOrientation(): Boolean {
+        try {
+            val field = Activity::class.java.getDeclaredField("mActivityInfo")
+            field.isAccessible = true
+            val activityInfo: ActivityInfo = field.get(this) as ActivityInfo
+            activityInfo.screenOrientation = -1
+            field.isAccessible = false
+            return true
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return false
+    }
 }
