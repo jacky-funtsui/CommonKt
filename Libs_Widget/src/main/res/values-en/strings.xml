@@ -1,0 +1,6 @@
+<resources>
+    <string name="state_data_empty">No news</string>
+    <string name="state_loading_hint">Please wait</string>
+    <string name="state_net_error">Hello?There seems to be no Internet!</string>
+    <string name="state_net_reload">Reload</string>
+</resources>

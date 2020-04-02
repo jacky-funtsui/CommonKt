@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -20,8 +21,8 @@
             android:id="@+id/arr_empty_tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="35dp"
             android:layout_marginTop="30dp"
+            android:layout_marginBottom="35dp"
             android:text="@string/state_net_error"
             android:textColor="#999999"
             android:textSize="15sp" />
@@ -31,7 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/btn_onload"
-            android:text="重新加载"
+            android:text="@string/state_net_reload"
             android:textColor="@color/btn_color"
             android:textSize="16sp" />
     </LinearLayout>
