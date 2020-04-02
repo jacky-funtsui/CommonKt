@@ -3,4 +3,6 @@
     <string name="state_loading_hint">請稍等</string>
     <string name="state_net_error">hello?好像沒網絡啊！</string>
     <string name="state_net_reload">重新加載</string>
+    <!--  Dialog  -->
+    <string name="dialog_loading_message">請稍等..</string>
 </resources>
