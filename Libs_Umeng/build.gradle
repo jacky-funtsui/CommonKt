@@ -47,10 +47,10 @@ android {
         release.setRoot('build-types/release')
     }
 
-    android {
-        lintOptions {
-            abortOnError false
-        }
+    lintOptions {
+        disable 'InvalidPackage'
+        disable "ResourceType"
+        abortOnError false
     }
 }
 

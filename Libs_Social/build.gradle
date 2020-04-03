@@ -23,9 +23,10 @@ android {
     }
 
     lintOptions {
+        disable 'InvalidPackage'
+        disable "ResourceType"
         abortOnError false
     }
-
 }
 
 dependencies {

@@ -27,6 +27,12 @@ android {
     dataBinding {
         enabled = true
     }
+
+    lintOptions {
+        disable 'InvalidPackage'
+        disable "ResourceType"
+        abortOnError false
+    }
 }
 
 dependencies {
