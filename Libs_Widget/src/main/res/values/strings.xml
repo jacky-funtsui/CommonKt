@@ -1,5 +1,5 @@
 <resources>
-    <string name="state_data_empty">暂无信息</string>
+    <string name="state_data_empty">暂无数据</string>
     <string name="state_loading_hint">请稍等</string>
     <string name="state_net_error">hello?好像没网络啊！</string>
     <string name="state_net_reload">重新加载</string>
