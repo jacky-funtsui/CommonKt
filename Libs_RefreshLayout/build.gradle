@@ -36,12 +36,11 @@ dependencies {
     implementation lib.SupportV7
     implementation lib.SupportRecyclerviewV7
     // 网络请求
-//    compileOnly  "com.ssf.framework:net:$config.framework_net_version"
-    implementation project(':Libs_Net')
-    implementation project(':Libs_Widget')
-    implementation project(':Libs_Log')
-    implementation project(':Libs_Util')
-    implementation project(':Libs_AutoLayout')
+    implementation "com.ssf.framework:net:$config.framework_net_version"
+    implementation "com.ssf.framework:widget:$config.framework_widget_version"
+    implementation "com.ssf.framework:log:$config.framework_log_version"
+    implementation "com.ssf.framework:util:$config.framework_util_version"
+    implementation "com.ssf.framework:autolayout:$config.framework_autolayout_version"
 }
 
 apply from: 'upload_bintray.gradle'
