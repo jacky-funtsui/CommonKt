@@ -1,0 +1,4 @@
+<resources>
+    <string name="footer_load_ing">Loading more data</string>
+    <string name="footer_load_end">No more data</string>
+</resources>
