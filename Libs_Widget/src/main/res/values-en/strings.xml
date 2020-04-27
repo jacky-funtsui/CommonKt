@@ -1,8 +1,8 @@
 <resources>
-    <string name="state_data_empty">No data</string>
-    <string name="state_loading_hint">Please wait</string>
+    <string name="state_data_empty">No Data</string>
+    <string name="state_loading_hint">Please Wait</string>
     <string name="state_net_error">Hello?There seems to be no Internet!</string>
     <string name="state_net_reload">Reload</string>
     <!--  Dialog  -->
-    <string name="dialog_loading_message">Please wait..</string>
+    <string name="dialog_loading_message">Please Wait..</string>
 </resources>
